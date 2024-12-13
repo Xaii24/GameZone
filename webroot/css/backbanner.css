@@ -1,0 +1,22 @@
+.Rectangle {
+    position: absolute;
+    top: -30px;
+    left: -137.5px;
+    width: 590px;
+    height: 85px;
+    background-color: black;
+    z-index: -1;
+    border-radius: 15px;
+}
+.black-rectangle {
+    position: relative;
+    width: 600px; /* Width of the rectangle */
+    height: 86px; /* Height of the rectangle */
+    background-color: black; /* Rectangle color */
+    border: 2px solid white; /* Optional: white border for contrast */
+    margin-top: -110px;
+    margin-left: 200px;
+    border-radius: 5px;
+    z-index: -1;
+    border-radius: 20px;
+}

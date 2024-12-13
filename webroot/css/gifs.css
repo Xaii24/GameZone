@@ -1,0 +1,15 @@
+.nintendo-gif {
+    position: absolute;
+    top: -30px;
+    left: -230px;
+    width: 95px;
+    z-index: -1;
+}
+.gameboy-gif {
+    position: absolute;
+    top: -40px;
+    right: 0px;
+    width: 160px;
+    height: 105px;
+    z-index: -1;
+}

@@ -1,0 +1,1405 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;\red31\green31\blue36;\red252\green95\blue163;
+\red93\green216\blue255;\red208\green168\blue255;\red108\green121\blue134;\red65\green161\blue192;\red208\green168\blue255;
+\red252\green106\blue93;\red158\green241\blue221;\red158\green241\blue221;\red208\green191\blue105;\red103\green183\blue164;
+\red103\green183\blue164;\red161\green103\blue230;\red161\green103\blue230;}
+{\*\expandedcolortbl;;\csgenericrgb\c100000\c100000\c100000\c85000;\csgenericrgb\c12054\c12284\c14131;\csgenericrgb\c98839\c37355\c63833;
+\csgenericrgb\c36295\c84643\c99897;\csgenericrgb\c81569\c65882\c100000;\csgenericrgb\c42394\c47462\c52518;\csgenericrgb\c25490\c63137\c75294;\csgenericrgb\c81681\c65692\c99927;
+\csgenericrgb\c98912\c41558\c36568;\csgenericrgb\c62145\c94386\c86819;\csgenericrgb\c61961\c94510\c86667;\csgenericrgb\c81498\c74939\c41233;\csgenericrgb\c40538\c71705\c64209;
+\csgenericrgb\c40392\c71765\c64314;\csgenericrgb\c63232\c40219\c90115;\csgenericrgb\c63137\c40392\c90196;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab642
+\pard\tx642\pardeftab642\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 \
+\pard\tx642\pardeftab642\partightenfactor0
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  Foundation\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  SwiftUI\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  Combine\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  FirebaseFirestore\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  FirebaseAuth\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  FirebaseStorage\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  FirebaseFirestore\
+
+\f1\b \cf4 \cb3 import
+\f0\b0 \cf2 \cb3  FirebaseFunctions\
+\
+\
+
+\f1\b \cf4 \cb3 struct
+\f0\b0 \cf2 \cb3  \cf5 \cb3 ConversationView\cf2 \cb3 : \cf6 View\cf2  \{\
+\pard\tx642\pardeftab642\partightenfactor0
+\cf7 \cb3 //    @ObservedObject var conversationViewModel: ConversationViewModel\cf2 \cb3 \
+\cf7 \cb3 //    var senderUid: String?  // Declare senderUid at the class level\cf2 \cb3 \
+\
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 participantIds\cf2 : [\cf9 String\cf2 ] = []  \cf7 \cb3 // Assuming this property is available\cf2 \cb3 \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 chatRoomID\cf2 : \cf9 String\cf2 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 messageText\cf2  = \cf10 \cb3 ""\cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 messages\cf2 : [\cf9 Message\cf2 ] = []\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 selectedImage\cf2 : \cf6 UIImage\cf2 ?\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isImagePickerPresented\cf2 : \cf9 Bool\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isCurrentUser\cf2  = 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3  \cf7 \cb3 // Initially set as the current user\cf2 \cb3 \
+    \cf9 @Binding\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 selectedTab\cf2 : \cf11 \cb3 ContentView\cf2 \cb3 .\cf11 \cb3 Tab\cf2 \cb3 \
+    \cf9 @Binding\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 showBackButton\cf2 : \cf9 Bool\cf2 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 inConversation\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3  \cf7 \cb3 // Initially set it to false\cf2 \cb3 \
+    \cf9 @StateObject\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 contentModel\cf2  = \cf12 \cb3 ContentModel\cf2 \cb3 ()\
+    \cf9 @Binding\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 shouldShowBackArrow\cf2 : \cf9 Bool\cf2 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 hideBackButton\cf2 : \cf9 Bool\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 cameFromConversationsListView\cf2 : \cf9 Bool\cf2 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isViewingChat\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3  \cf7 \cb3 // Add a state variable to track if the user is currently viewing the chat\cf2 \cb3 \
+\cf7 \cb3 //    @EnvironmentObject var selectedFriend: SelectedFriend\cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 badgeCount\cf2  = \cf13 \cb3 0\cf2 \cb3  \cf7 \cb3 // or fetch it from somewhere\cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isInSpecificView\cf2 : \cf9 Bool\cf2  = 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3  \cf7 \cb3 // Set to true when in the specific view\cf2 \cb3 \
+\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isInBackground\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 cancellables\cf2 : \cf9 Set\cf2 <\cf6 AnyCancellable\cf2 > = []\
+    \cf9 @StateObject\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 notificationManager\cf2  = \cf12 \cb3 NotificationManager\cf2 \cb3 .\cf14 shared\cf2 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isInConversation\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 currentChatRoomID\cf2 : \cf9 String\cf2 ?\
+\
+\
+    \
+\
+\
+    \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 currentUserUID\cf2 : \cf9 String\cf2 ? \cf7 \cb3 // Add a property to store the current user's UID\cf2 \cb3 \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 currentChatUserID\cf2 : \cf9 String\cf2 ? \cf7 \cb3 // Set this to the actual user ID when you enter a conversation\cf2 \cb3 \
+\
+\
+    
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 messagesCollectionRef\cf2 : \cf12 \cb3 CollectionReference\cf2 \cb3  \{\
+\
+        \cf12 \cb3 Firestore\cf2 \cb3 .\cf15 \cb3 firestore\cf2 \cb3 ().\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "chats"\cf2 \cb3 ).\cf15 \cb3 document\cf2 \cb3 (\cf14 chatRoomID\cf2 ).\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "msgs"\cf2 \cb3 )\
+\
+    \}\
+\
+\cf7 \cb3 //    var userId: String = ""\cf2 \cb3 \
+\
+\cf7 \cb3 //    @State private var badgeCount: Int = 0\cf2 \cb3 \
+\
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 userId\cf2 : \cf9 String\cf2 ? \{\
+            
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  \cf12 \cb3 Auth\cf2 \cb3 .\cf15 \cb3 auth\cf2 \cb3 ().\cf14 currentUser\cf2 ?.\cf16 uid\cf2 \
+        \}\
+    \
+\cf7 \cb3 //    var senderUid: String? \{\cf2 \cb3 \
+\cf7 \cb3 //            return Auth.auth().currentUser?.uid\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    var senderid: String? \{\cf2 \cb3 \
+\cf7 \cb3 //           // Return the appropriate value for senderid\cf2 \cb3 \
+\cf7 \cb3 //           // For example, if you have the sender's ID stored somewhere, return that value\cf2 \cb3 \
+\cf7 \cb3 //        return Auth.auth().currentUser?.uid\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //       \}\cf2 \cb3 \
+    \
+    \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 functions\cf2  = \cf12 \cb3 Functions\cf2 \cb3 .\cf15 \cb3 functions\cf2 \cb3 ()\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 shouldCallCloudFunction\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @EnvironmentObject\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 appState\cf2 : \cf12 \cb3 AppState\cf2 \cb3 \
+\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 message\cf2 : \cf9 Message\cf2 ?\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 chatId\cf2 : \cf9 String\cf2 ?\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 senderUid\cf2 : \cf9 String\cf2 ?\
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isInConversationView\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+    \cf9 @State\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 isActive\cf2 : \cf9 Bool\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3   \cf7 \cb3 // Add this property\cf2 \cb3 \
+\
+\
+\
+   \
+\
+\
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 body\cf2 : 
+\f1\b \cf4 \cb3 some
+\f0\b0 \cf2 \cb3  \cf6 View\cf2  \{\
+       \
+        \cf9 NavigationView\cf2  \{\
+            \
+            \cf9 VStack\cf2  \{\
+                \
+                \cf9 ScrollViewReader\cf2  \{ proxy 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+                    \
+                    \cf9 ScrollView\cf2  \{\
+                        \
+                        \cf9 ForEach\cf2 (\cf14 messages\cf2 ) \{ message 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+                            \
+                            \cf9 VStack\cf2 (\cf17 alignment\cf2 : .\cf16 leading\cf2 ) \{\
+                                \
+                                \cf9 Text\cf2 (\cf10 \cb3 "\cf2 \cb3 \\(message.\cf14 senderUsername\cf2 )\cf10 \cb3 : \cf2 \cb3 \\(message.content)\cf10 \cb3 "\cf2 \cb3 )\
+                                \
+                                    .\cf17 id\cf2 (message.id)\
+                                \
+                                \
+                                \
+                            \}\
+                            \
+                            \cf9 Spacer\cf2 ()\
+                            \
+                            \cf9 Text\cf2 (\cf15 \cb3 formatTimestamp\cf2 \cb3 (message.timestamp))\
+                            \
+                                .\cf17 font\cf2 (.\cf16 caption\cf2 )\
+                                .\cf17 foregroundColor\cf2 (.\cf16 gray\cf2 )\
+                                .\cf17 padding\cf2 (.\cf16 leading\cf2 , \cf13 \cb3 60.0\cf2 \cb3 )\
+                            \
+                        \}\
+                        \
+                    \}\
+                    .\cf17 onChange\cf2 (\cf17 of\cf2 : \cf14 messages\cf2 ) \{ _ 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+                        \
+                        \cf17 withAnimation\cf2  \{\
+                            \
+                            proxy.\cf17 scrollTo\cf2 (\cf14 messages\cf2 .\cf16 last\cf2 ?.\cf14 id\cf2 , \cf17 anchor\cf2 : .\cf16 bottom\cf2 )\
+                            \
+                        \}\
+                    \}\
+                    \
+                    \
+                \}\
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \
+                \cf9 HStack\cf2  \{\
+                    \
+                    \cf9 Button\cf2 (\cf17 action\cf2 : \{\
+                        \
+                        \cf14 isImagePickerPresented\cf2 .\cf17 toggle\cf2 ()\
+                        \
+                    \}) \{\
+                        \
+                        \cf9 Image\cf2 (\cf17 systemName\cf2 : \cf10 \cb3 "camera"\cf2 \cb3 )\
+                        \
+                            .\cf17 padding\cf2 ()\
+                            .\cf17 background\cf2 (\cf9 Color\cf2 .\cf16 blue\cf2 )\
+                            .\cf17 foregroundColor\cf2 (.\cf16 white\cf2 )\
+                            .\cf17 clipShape\cf2 (\cf9 Circle\cf2 ())\
+                        \
+                    \}\
+                    .\cf17 sheet\cf2 (\cf17 isPresented\cf2 : \cf14 $isImagePickerPresented\cf2 ) \{\
+                        \
+                        \cf11 \cb3 ImagePicker\cf2 \cb3 (\cf11 \cb3 selectedImage\cf2 \cb3 : \cf14 $selectedImage\cf2 )\
+                        \
+                    \}\
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \cf9 ZStack\cf2  \{\
+                        \
+                        \cf9 Rectangle\cf2 ()\
+                        \
+                            .\cf17 foregroundColor\cf2 (.\cf16 white\cf2 )\
+                        \
+                            .\cf17 cornerRadius\cf2 (\cf13 \cb3 50\cf2 \cb3 )\
+                        \
+                        \
+                        \
+                        \cf9 TextField\cf2 (\cf10 \cb3 "Type your message..."\cf2 \cb3 , \cf17 text\cf2 : \cf14 $messageText\cf2 )\
+                        \
+                            .\cf17 textFieldStyle\cf2 (\cf9 RoundedBorderTextFieldStyle\cf2 ())\
+                        \
+                            .\cf17 cornerRadius\cf2 (\cf13 \cb3 50\cf2 \cb3 )\
+                        \
+                            .\cf17 padding\cf2 (.\cf16 horizontal\cf2 )\
+                        \
+                            .\cf17 padding\cf2 (\cf13 \cb3 10\cf2 \cb3 )\
+                        \
+                    \}\
+                    \
+                    .\cf17 frame\cf2 (\cf17 height\cf2 : \cf13 \cb3 76\cf2 \cb3 )\
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \
+                    \cf9 Button\cf2 (\cf17 action\cf2 : \cf15 \cb3 sendMessage\cf2 \cb3 ) \{\
+                        \
+                        \cf9 Text\cf2 (\cf10 \cb3 "Send"\cf2 \cb3 )\
+                        \
+                    \}\
+                    \
+                    .\cf17 padding\cf2 (.\cf16 trailing\cf2 )\
+                    \
+                \}\
+                \
+                .\cf17 padding\cf2 (.\cf16 bottom\cf2 )\
+                \
+            \}\
+            \
+            .\cf17 navigationBarTitle\cf2 (\cf10 \cb3 "Chat Room"\cf2 \cb3 )\
+            \
+            .\cf17 toolbar\cf2  \{\
+                \
+                \cf9 ToolbarItem\cf2 (\cf17 placement\cf2 : .\cf16 navigationBarLeading\cf2 ) \{\
+                    \
+                    
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  \cf14 shouldShowBackArrow\cf2  \{\
+                        \
+                        \cf9 Button\cf2 (\cf17 action\cf2 : \{\
+                            \
+                            \cf14 selectedTab\cf2  = .\cf14 friends\cf2 \
+                            \
+                        \}) \{\
+                            \
+                            \cf9 Image\cf2 (\cf17 systemName\cf2 : \cf10 \cb3 "chevron.backward"\cf2 \cb3 )\
+                            \
+                                .\cf17 padding\cf2 (.\cf16 top\cf2 , \cf13 \cb3 10\cf2 \cb3 )\
+                            \
+                        \}\
+                        \
+                    \}\
+                    \
+                \}\
+                \
+            \}\
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            \
+            .\cf17 onAppear\cf2  \{\
+\
+                \cf15 \cb3 updateCurrentChatRoomID\cf2 \cb3 (\cf15 \cb3 chatRoomID\cf2 \cb3 : \cf14 chatRoomID\cf2 )\
+\
+\cf7 \cb3 //                currentChatRoomID = chatRoomID // Replace with your logic to get the chat room ID\cf2 \cb3 \
+\
+                \cf14 isInConversation\cf2  = 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3 \
+\
+\cf7 \cb3 //                let userInfo: [AnyHashable: Any] = ["chatRoomID": chatRoomID]\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                notificationManager.handleNotification(userInfo, completionHandler: \{ options in\cf2 \cb3 \
+\cf7 \cb3 //                    // Handle the options if needed\cf2 \cb3 \
+\cf7 \cb3 //                    // This closure is the completionHandler you want to pass\cf2 \cb3 \
+\cf7 \cb3 //                \})\cf2 \cb3 \
+                \cf7 \cb3 //                 fetchAndSetParticipantIds()\cf2 \cb3 \
+\cf7 \cb3 //                 let currentChatRoomID = chatRoomID,\cf2 \cb3 \
+\cf7 \cb3 //                 let participantIds =  // fetch the participant IDs dynamically from Firestore\cf2 \cb3 \
+\cf7 \cb3 //                   else \{\cf2 \cb3 \
+\cf7 \cb3 //                       return\cf2 \cb3 \
+\cf7 \cb3 //                   \}\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                   NotificationManager.shared.updateChatRoomID(currentChatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //                   NotificationManager.shared.updateParticipantIdsInConversation(participantIds: participantIds)\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                \cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\
+\
+                \cf15 \cb3 fetchMessages\cf2 \cb3 ()\
+                \cf15 \cb3 fetchParticipantIds\cf2 \cb3 ()\
+\
+                \
+                \
+                \cf7 \cb3 // Observe real-time updates for badge count\cf2 \cb3 \
+                
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  userId = \cf14 userId\cf2  \{\
+                    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  userDocRef = \cf12 \cb3 Firestore\cf2 \cb3 .\cf15 \cb3 firestore\cf2 \cb3 ().\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "users"\cf2 \cb3 ).\cf15 \cb3 document\cf2 \cb3 (userId)\
+                    \
+                    userDocRef.\cf15 \cb3 addSnapshotListener\cf2 \cb3  \{ snapshot, error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+                        
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+                            \cf17 print\cf2 (\cf10 \cb3 "Error fetching user data: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+                            
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+                        \}\
+                        \
+                        
+\f1\b \cf4 \cb3 guard
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  data = snapshot?.\cf17 data\cf2 (),\
+                              
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  newBadgeCount = data[\cf10 \cb3 "badge"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 Int\cf2  
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+                            
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+                        \}\
+                        \
+                        \cf14 badgeCount\cf2  = newBadgeCount\
+                        \cf6 UIApplication\cf2 .\cf16 shared\cf2 .\cf16 applicationIconBadgeNumber\cf2  = \cf14 badgeCount\cf2 \
+                    \}\
+                \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+                    \cf17 print\cf2 (\cf10 \cb3 "User ID is nil"\cf2 \cb3 )\
+                \}\
+            \
+                \
+\
+                \cf14 appState\cf2 .\cf14 activeView\cf2  = .\cf14 conversation\cf2 \
+\
+\
+\
+            \}.\cf17 onAppear\cf2  \{\
+\
+                
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  \cf14 cameFromConversationsListView\cf2  \{\
+                    \cf14 hideBackButton\cf2  = 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3 \
+                \}\
+                \
+            \}.\cf17 onDisappear\cf2  \{\
+                \cf15 \cb3 updateCurrentChatRoomID\cf2 \cb3 (\cf15 \cb3 chatRoomID\cf2 \cb3 : \cf10 \cb3 ""\cf2 \cb3 ) \cf7 \cb3 // Set it to an empty string\cf2 \cb3 \
+\
+                \cf14 isInConversation\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+\
+\
+                    \cf14 appState\cf2 .\cf14 activeView\cf2  = .\cf14 none\cf2 \
+                    
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 .\cf14 isInBackground\cf2  = 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+                    \cf14 cancellables\cf2 .\cf17 removeAll\cf2 () \cf7 \cb3 // or cancel specific subscriptions\cf2 \cb3 \
+\
+                \}\
+               \
+\
+        \}\cf7 \cb3 //Entering Background...\cf2 \cb3 \
+        .\cf17 onReceive\cf2 (\cf6 NotificationCenter\cf2 .\cf16 default\cf2 .\cf17 publisher\cf2 (\cf17 for\cf2 : \cf6 UIApplication\cf2 .\cf16 willResignActiveNotification\cf2 )) \{ _ 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+            
+\f1\b \cf4 \cb3 guard
+\f0\b0 \cf2 \cb3  \cf14 appState\cf2 .\cf14 activeView\cf2  == .\cf14 conversation\cf2  
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{ 
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  \}\
+            
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 .\cf14 isInBackground\cf2  = 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3 \
+            
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 .\cf15 \cb3 appDidEnterBackground\cf2 \cb3 ()\
+        \}.\cf17 navigationBarBackButtonHidden\cf2 (\cf14 hideBackButton\cf2 )\
+        \
+\
+\
+        \
+\
+\
+\
+\
+\
+\
+\
+\
+    \}\
+    \
+\cf7 \cb3 //    func handleNotification(_ userInfo: [AnyHashable: Any], completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) \{\cf2 \cb3 \
+\cf7 \cb3 //        // Print the received userInfo for debugging\cf2 \cb3 \
+\cf7 \cb3 //        print("Received userInfo: \\(userInfo)")\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //        // Extract chatRoomID from userInfo (adjust this based on your actual data structure)\cf2 \cb3 \
+\cf7 \cb3 //        if let chatRoomIDFromNotification = userInfo["chatRoomID"] as? String,\cf2 \cb3 \
+\cf7 \cb3 //            chatRoomIDFromNotification != currentChatRoomID \{\cf2 \cb3 \
+\cf7 \cb3 //            // The sender is not in the current conversation view, present the notification\cf2 \cb3 \
+\cf7 \cb3 //            print("Presenting notification")\cf2 \cb3 \
+\cf7 \cb3 //            completionHandler([.banner, .list, .sound, .badge])\cf2 \cb3 \
+\cf7 \cb3 //        \} else \{\cf2 \cb3 \
+\cf7 \cb3 //            // The sender is in the current conversation view, suppress the notification\cf2 \cb3 \
+\cf7 \cb3 //            print("Sender is in the conversation view. Suppressing notification.")\cf2 \cb3 \
+\cf7 \cb3 //            completionHandler([])\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    \}\cf2 \cb3 \
+\
+\cf7 \cb3 //    func fetchAndSetParticipantIds() \{\cf2 \cb3 \
+\cf7 \cb3 //        // Assuming you have a Firestore collection of chat rooms\cf2 \cb3 \
+\cf7 \cb3 //        let chatRoomRef = Firestore.firestore().collection("chats").document(chatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //        // Fetch participant IDs\cf2 \cb3 \
+\cf7 \cb3 //        chatRoomRef.getDocument \{ document, error in\cf2 \cb3 \
+\cf7 \cb3 //            if let error = error \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error fetching chat room data: \\(error.localizedDescription)")\cf2 \cb3 \
+\cf7 \cb3 //            \} else if let document = document, let participantIds = document["participantids"] as? [String] \{\cf2 \cb3 \
+\cf7 \cb3 //                // Use participantIds as needed\cf2 \cb3 \
+\cf7 \cb3 //                NotificationManager.shared.updateParticipantIdsInConversation(participantIds: participantIds)\cf2 \cb3 \
+\cf7 \cb3 //            \} else \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error: Participant IDs not found")\cf2 \cb3 \
+\cf7 \cb3 //            \}\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    \}\cf2 \cb3 \
+\
+    \
+\
+\cf7 \cb3 //    func fetchAndSetChatRoomID(for chatRoomID: String) \{\cf2 \cb3 \
+\cf7 \cb3 //        // Assuming you have a Firestore collection of chat rooms\cf2 \cb3 \
+\cf7 \cb3 //        let chatRoomRef = Firestore.firestore().collection("chats").document(chatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //        // Fetch participant IDs\cf2 \cb3 \
+\cf7 \cb3 //        chatRoomRef.getDocument \{ document, error in\cf2 \cb3 \
+\cf7 \cb3 //            if let error = error \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error fetching chat room data: \\(error.localizedDescription)")\cf2 \cb3 \
+\cf7 \cb3 //            \} else if let document = document, let participantIds = document["participantids"] as? [String] \{\cf2 \cb3 \
+\cf7 \cb3 //                // Now you can use these participant IDs as needed\cf2 \cb3 \
+\cf7 \cb3 //                if participantIds.count >= 2 \{\cf2 \cb3 \
+\cf7 \cb3 //                    // Concatenate the participant IDs as the currentChatRoomID\cf2 \cb3 \
+\cf7 \cb3 //                    let currentChatRoomID = participantIds.joined(separator: "_")\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // Set the currentChatRoomID in the manager\cf2 \cb3 \
+\cf7 \cb3 //                    ChatRoomManager.shared.currentChatRoomID = currentChatRoomID\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // Perform any other actions with currentChatRoomID\cf2 \cb3 \
+\cf7 \cb3 //                    print("Current Chat Room ID: \\(currentChatRoomID)")\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // You can also call resetBadgeCountForChatRoom here if needed\cf2 \cb3 \
+\cf7 \cb3 //                    // resetBadgeCountForChatRoom(userId: userId, senderUid: currentChatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //                \}\cf2 \cb3 \
+\cf7 \cb3 //            \}\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    \}\cf2 \cb3 \
+\
+    \
+   \
+    \cf7 \cb3 // Function to update the conversation status\cf2 \cb3 \
+    \
+\cf7 \cb3 //    func senderForManager2(chatRoomID: String, userId: String) \{\cf2 \cb3 \
+\cf7 \cb3 //        let chatRoomRef = Firestore.firestore().collection("chats").document(chatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //        // Fetch participant IDs\cf2 \cb3 \
+\cf7 \cb3 //        chatRoomRef.getDocument \{ document, error in\cf2 \cb3 \
+\cf7 \cb3 //            if let error = error \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error fetching chat room data: \\(error.localizedDescription)")\cf2 \cb3 \
+\cf7 \cb3 //            \} else if let document = document, let participantIds = document["participantids"] as? [String] \{\cf2 \cb3 \
+\cf7 \cb3 //                // Filter out the current user's ID\cf2 \cb3 \
+\cf7 \cb3 //                let otherParticipants = participantIds.filter \{ $0 != userId \}\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                // Now you can use these participant IDs as needed\cf2 \cb3 \
+\cf7 \cb3 //                for participantId in otherParticipants \{\cf2 \cb3 \
+\cf7 \cb3 //                    print("Processing participantId: \\(participantId)")\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // Perform actions with participantId\cf2 \cb3 \
+\cf7 \cb3 //                    // For example, you can use it in your NotificationManager\cf2 \cb3 \
+\cf7 \cb3 //                    NotificationManager2.shared.handleNotification(participantId) \{ options in\cf2 \cb3 \
+\cf7 \cb3 //                        // Handle the presentation options if needed\cf2 \cb3 \
+\cf7 \cb3 //                        \cf2 \cb3 \
+\cf7 \cb3 //                    \}\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // Or any other action you want to perform with the participant ID\cf2 \cb3 \
+\cf7 \cb3 //                \}\cf2 \cb3 \
+\cf7 \cb3 //            \}\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    \}\cf2 \cb3 \
+    \
+\cf7 \cb3 //    func fetchSendermsg() \{\cf2 \cb3 \
+\cf7 \cb3 //        // Assuming you have a Firestore collection of chat rooms\cf2 \cb3 \
+\cf7 \cb3 //        let chatRoomRef = Firestore.firestore().collection("chats").document(chatRoomID)\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //        // Fetch participant IDs\cf2 \cb3 \
+\cf7 \cb3 //        chatRoomRef.getDocument \{ document, error in\cf2 \cb3 \
+\cf7 \cb3 //            if let error = error \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error fetching chat room data: \\(error.localizedDescription)")\cf2 \cb3 \
+\cf7 \cb3 //            \} else if let document = document, let participantIds = document["participantids"] as? [String] \{\cf2 \cb3 \
+\cf7 \cb3 //                // Use participantIds as needed\cf2 \cb3 \
+\cf7 \cb3 //                // Now you can check if the sender's UID matches any participant ID\cf2 \cb3 \
+\cf7 \cb3 //                if let senderUid = self.senderUid \{\cf2 \cb3 \
+\cf7 \cb3 //                    let isFromConversationView = participantIds.contains(senderUid)\cf2 \cb3 \
+\cf7 \cb3 //                    // Set the flag accordingly\cf2 \cb3 \
+\cf7 \cb3 //                    self.isFromConversationView = isFromConversationView\cf2 \cb3 \
+\cf7 \cb3 //\cf2 \cb3 \
+\cf7 \cb3 //                    // ... Other logic ...\cf2 \cb3 \
+\cf7 \cb3 //                \} else \{\cf2 \cb3 \
+\cf7 \cb3 //                    print("Error: Sender UID is nil")\cf2 \cb3 \
+\cf7 \cb3 //                \}\cf2 \cb3 \
+\cf7 \cb3 //            \} else \{\cf2 \cb3 \
+\cf7 \cb3 //                print("Error: Participant IDs not found")\cf2 \cb3 \
+\cf7 \cb3 //            \}\cf2 \cb3 \
+\cf7 \cb3 //        \}\cf2 \cb3 \
+\cf7 \cb3 //    \}\cf2 \cb3 \
+    \cf7 \cb3 // Function to update the participant IDs and current chat room ID for the user\cf2 \cb3 \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 updateCurrentChatRoomID\cf2 (\cf8 chatRoomID\cf2 : \cf9 String\cf2 ) \{\
+        \cf7 \cb3 // Assuming you have a reference to the current user's document in Firestore\cf2 \cb3 \
+        
+\f1\b \cf4 \cb3 guard
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  currentUserUID = \cf12 \cb3 Auth\cf2 \cb3 .\cf15 \cb3 auth\cf2 \cb3 ().\cf14 currentUser\cf2 ?.\cf16 uid\cf2  
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+            
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+        \}\
+        \
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  userRef = \cf12 \cb3 Firestore\cf2 \cb3 .\cf15 \cb3 firestore\cf2 \cb3 ().\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "users"\cf2 \cb3 ).\cf15 \cb3 document\cf2 \cb3 (currentUserUID)\
+        \
+        \cf7 \cb3 // Update the current chat room ID in the user's document\cf2 \cb3 \
+        userRef.\cf15 \cb3 updateData\cf2 \cb3 ([\
+            \cf10 \cb3 "currentChatRoomID"\cf2 \cb3 : chatRoomID\
+        ]) \{ error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+                \cf17 print\cf2 (\cf10 \cb3 "Error updating user document: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+                \cf17 print\cf2 (\cf10 \cb3 "User document updated successfully with currentChatRoomID: \cf2 \cb3 \\(chatRoomID)\cf10 \cb3 "\cf2 \cb3 )\
+            \}\
+        \}\
+    \}\
+\
+\cf7 \cb3 //    // Call this function when entering the conversation view with the dynamic chatRoomID\cf2 \cb3 \
+\cf7 \cb3 //    updateCurrentChatRoomID(chatRoomID: "chatRoom123")\cf2 \cb3 \
+\
+\
+   \
+  \
+\
+\
+    \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 appDidEnterBackground\cf2 () \{\
+          \cf7 \cb3 // This method will be called when the app goes into the background.\cf2 \cb3 \
+          \cf7 \cb3 // Add your specific logic here.\cf2 \cb3 \
+        \cf17 print\cf2 (\cf10 \cb3 "Entering background..."\cf2 \cb3 )\
+\
+        
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  \cf14 isInBackground\cf2  == 
+\f1\b \cf4 \cb3 true
+\f0\b0 \cf2 \cb3  \{\
+            \cf15 \cb3 fetchParticipantIds\cf2 \cb3 ()\
+        \}\
+      \}\
+    \
+\
+    \
+   \
+\
+    \
+    
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 fetchParticipantIds\cf2 () \{\
+        \cf7 \cb3 // Assuming you have a Firestore collection of chat rooms\cf2 \cb3 \
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  chatRoomRef = \cf12 \cb3 Firestore\cf2 \cb3 .\cf15 \cb3 firestore\cf2 \cb3 ().\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "chats"\cf2 \cb3 ).\cf15 \cb3 document\cf2 \cb3 (\cf14 chatRoomID\cf2 )\
+\
+        \cf7 \cb3 // Fetch participant IDs\cf2 \cb3 \
+        chatRoomRef.\cf15 \cb3 getDocument\cf2 \cb3  \{ document, error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+                \cf17 print\cf2 (\cf10 \cb3 "Error fetching chat room data: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  document = document, 
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  participantIds = document[\cf10 \cb3 "participantids"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? [\cf9 String\cf2 ] \{\
+                \cf7 \cb3 // Filter out the current user's ID\cf2 \cb3 \
+                
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  userId = 
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 .\cf14 userId\cf2  \{\
+                    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  otherParticipants = participantIds.\cf17 filter\cf2  \{ $0 != userId \}\
+\
+                    \cf7 \cb3 // Now you can use these participant IDs as needed\cf2 \cb3 \
+                    
+\f1\b \cf4 \cb3 for
+\f0\b0 \cf2 \cb3  participantId 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3  otherParticipants \{\
+                        \cf17 print\cf2 (\cf10 \cb3 "Processing participantId: \cf2 \cb3 \\(participantId)\cf10 \cb3 "\cf2 \cb3 )\
+\
+                        \cf7 \cb3 // Perform actions with participantId\cf2 \cb3 \
+                        \cf15 \cb3 resetBadgeCountForChatRoom\cf2 \cb3 (\cf15 \cb3 userId\cf2 \cb3 : userId, \cf15 \cb3 senderUid\cf2 \cb3 : participantId)\
+                    \}\
+                \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+                    \cf17 print\cf2 (\cf10 \cb3 "Error: User ID is nil"\cf2 \cb3 )\
+                \}\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+                \cf17 print\cf2 (\cf10 \cb3 "Error: Participant IDs not found"\cf2 \cb3 )\
+            \}\
+        \}\
+    \}\
+\
+\
+\
+    \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 resetBadgeCountForChatRoom\cf2 (\cf8 userId\cf2 : \cf9 String\cf2 , \cf8 senderUid\cf2 : \cf9 String\cf2 ) \{\
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  functions = \cf12 \cb3 Functions\cf2 \cb3 .\cf15 \cb3 functions\cf2 \cb3 ()\
+        \
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  data: [\cf9 String\cf2 : 
+\f1\b \cf4 \cb3 Any
+\f0\b0 \cf2 \cb3 ] = [\
+            \cf10 \cb3 "userId"\cf2 \cb3 : userId,\
+            \cf10 \cb3 "senderUid"\cf2 \cb3 : senderUid\
+        ]\
+\
+        functions.\cf15 \cb3 httpsCallable\cf2 \cb3 (\cf10 \cb3 "resetBadgeCountForChatRoom"\cf2 \cb3 ).\cf15 \cb3 call\cf2 \cb3 (data) \{ result, error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+                \cf17 print\cf2 (\cf10 \cb3 "Error resetting badge count: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  data = result?.\cf14 data\cf2  
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? [\cf9 String\cf2 : 
+\f1\b \cf4 \cb3 Any
+\f0\b0 \cf2 \cb3 ] \{\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  success = data[\cf10 \cb3 "success"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 Bool\cf2  ?? 
+\f1\b \cf4 \cb3 false
+\f0\b0 \cf2 \cb3 \
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  message = data[\cf10 \cb3 "message"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 String\cf2  ?? \cf10 \cb3 "Unknown result"\cf2 \cb3 \
+\
+\
+                \cf17 print\cf2 (\cf10 \cb3 "Badge count reset - Success: \cf2 \cb3 \\(success)\cf10 \cb3 , Message: \cf2 \cb3 \\(message)\cf10 \cb3 "\cf2 \cb3 )\
+\
+                \cf7 \cb3 //                UIApplication.shared.applicationIconBadgeNumber = currentBadgeCount\cf2 \cb3 \
+\
+            \}\
+        \}\
+    \}\
+    \
+   \
+  \
+\
+    \
+    \
+    \
+    \
+    \
+    \
+\
+\
+\
+\cf7 \cb3 //Function to send a message\cf2 \cb3 \
+     
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 sendMessage\cf2 () \{\
+         \
+         \
+        
+\f1\b \cf4 \cb3 guard
+\f0\b0 \cf2 \cb3  !\cf14 messageText\cf2 .\cf16 isEmpty\cf2  
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{ 
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  \}\
+         
+\f1\b \cf4 \cb3 guard
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  senderUID = \cf12 \cb3 Auth\cf2 \cb3 .\cf15 \cb3 auth\cf2 \cb3 ().\cf14 currentUser\cf2 ?.\cf16 uid\cf2  
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+\
+            
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+\
+        \}\
+         \
+\
+        \cf15 \cb3 fetchUsername\cf2 \cb3 (\cf15 \cb3 forUID\cf2 \cb3 : senderUID) \{ senderUsername 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+\
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  senderUsername = senderUsername \{\
+\
+                \cf7 \cb3 // Make sure the "senderUsername" field is correctly set\cf2 \cb3 \
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  messageData: [\cf9 String\cf2 : 
+\f1\b \cf4 \cb3 Any
+\f0\b0 \cf2 \cb3 ] = [\
+\
+                    \cf10 \cb3 "msg"\cf2 \cb3 : \cf14 messageText\cf2 ,\
+\
+                    \cf10 \cb3 "senderid"\cf2 \cb3 : senderUID,\
+\
+                    \cf10 \cb3 "senderUsername"\cf2 \cb3 : senderUsername, \
+\
+                    \cf10 \cb3 "timestamp"\cf2 \cb3 : \cf12 \cb3 FieldValue\cf2 \cb3 .\cf15 \cb3 serverTimestamp\cf2 \cb3 ()\
+\
+                ]\
+\
+                \
+\
+                \cf14 messagesCollectionRef\cf2 .\cf15 \cb3 addDocument\cf2 \cb3 (\cf15 \cb3 data\cf2 \cb3 : messageData) \{ error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+\
+                    
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+\
+                        \cf17 print\cf2 (\cf10 \cb3 "Error sending message: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+\
+                    \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+\
+                        \
+\
+                        \cf14 messageText\cf2  = \cf10 \cb3 ""\cf2 \cb3 \
+\
+                    \}\
+\
+                \}\
+\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+\
+                \cf17 print\cf2 (\cf10 \cb3 "Error: Sender's username not found"\cf2 \cb3 )\
+\
+            \}\
+\
+        \}\
+\
+    \}\
+\
+    \
+\cf7 \cb3 // Function to fetch messages\cf2 \cb3 \
+    
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 fetchMessages\cf2 () \{\
+\
+        \cf14 messagesCollectionRef\cf2 .\cf15 \cb3 order\cf2 \cb3 (\cf15 \cb3 by\cf2 \cb3 : \cf10 \cb3 "timestamp"\cf2 \cb3 ).\cf15 \cb3 addSnapshotListener\cf2 \cb3  \{ querySnapshot, error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+\
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+\
+                \cf17 print\cf2 (\cf10 \cb3 "Error fetching messages: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+\
+                
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+\
+            \}\
+\
+            \
+\
+            \cf14 messages\cf2  = querySnapshot?.\cf14 documents\cf2 .\cf17 compactMap\cf2  \{ document 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  data = document.\cf17 data\cf2 ()\
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  senderid = data[\cf10 \cb3 "senderid"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 String\cf2 \
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  senderUsername = data[\cf10 \cb3 "senderUsername"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 String\cf2  \cf7 \cb3 // Fetch sender's username\cf2 \cb3 \
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  content = data[\cf10 \cb3 "msg"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 String\cf2 \
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  timestamp = (data[\cf10 \cb3 "timestamp"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf12 \cb3 Timestamp\cf2 \cb3 )?.\cf15 \cb3 dateValue\cf2 \cb3 ()\
+\
+                
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  senderName = \cf10 \cb3 "Some Username"\cf2 \cb3 \
+\
+                
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  \cf11 \cb3 Message\cf2 \cb3 (\cf15 \cb3 id\cf2 \cb3 : document.\cf14 documentID\cf2 , \cf15 \cb3 senderid\cf2 \cb3 : senderid ?? \cf10 \cb3 ""\cf2 \cb3 , \cf15 \cb3 senderUsername\cf2 \cb3 : senderUsername ?? \cf10 \cb3 ""\cf2 \cb3 , \cf15 \cb3 content\cf2 \cb3 : content ?? \cf10 \cb3 ""\cf2 \cb3 , \cf15 \cb3 timestamp\cf2 \cb3 : timestamp ?? \cf9 Date\cf2 ())\
+\
+                     \} ?? []\
+\
+        \}\
+\
+    \}\
+\
+    \
+\
+    \cf7 \cb3 // Function to fetch the sender's username\cf2 \cb3 \
+\
+    
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 fetchUsername\cf2 (\cf8 forUID\cf2  uid: \cf9 String\cf2 , \cf8 completion\cf2 : 
+\f1\b \cf4 \cb3 @escaping
+\f0\b0 \cf2 \cb3  (\cf9 String\cf2 ?) -> \cf9 Void\cf2 ) \{\
+\
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  usersCollectionRef = \cf12 \cb3 Firestore\cf2 \cb3 .\cf15 \cb3 firestore\cf2 \cb3 ().\cf15 \cb3 collection\cf2 \cb3 (\cf10 \cb3 "users"\cf2 \cb3 )\
+\
+        \
+\
+        \cf7 \cb3 // Fetch the user document with the specified UID\cf2 \cb3 \
+\
+        usersCollectionRef.\cf15 \cb3 document\cf2 \cb3 (uid).\cf15 \cb3 getDocument\cf2 \cb3  \{ snapshot, error 
+\f1\b \cf4 \cb3 in
+\f0\b0 \cf2 \cb3 \
+\
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  error = error \{\
+\
+                \cf17 print\cf2 (\cf10 \cb3 "Error fetching user data: \cf2 \cb3 \\(error.\cf16 localizedDescription\cf2 )\cf10 \cb3 "\cf2 \cb3 )\
+\
+                completion(
+\f1\b \cf4 \cb3 nil
+\f0\b0 \cf2 \cb3 )\
+\
+                
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3 \
+\
+            \}\
+\
+            \
+\
+            \cf7 \cb3 // Check if the document exists and contains a "username" field\cf2 \cb3 \
+\
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  userData = snapshot?.\cf17 data\cf2 (), 
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  username = userData[\cf10 \cb3 "username"\cf2 \cb3 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf9 String\cf2  \{\
+\
+                completion(username)\
+\
+            \} 
+\f1\b \cf4 \cb3 else
+\f0\b0 \cf2 \cb3  \{\
+\
+                \cf7 \cb3 // User document not found or missing username field\cf2 \cb3 \
+\
+                completion(
+\f1\b \cf4 \cb3 nil
+\f0\b0 \cf2 \cb3 )\
+\
+            \}\
+\
+        \}\
+\
+    \}\
+\
+\
+\
+\}\
+\
+\
+\
+\pard\tx642\pardeftab642\partightenfactor0
+
+\f1\b \cf4 \cb3 private
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 formatTimestamp\cf2 (\cf8 _\cf2  timestamp: \cf9 Date\cf2 ) -> \cf9 String\cf2  \{\
+\
+       
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  formatter = \cf6 DateFormatter\cf2 ()\
+\
+       formatter.\cf16 dateFormat\cf2  = \cf10 \cb3 "hh:mm a"\cf2 \cb3 \
+\
+       
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  formatter.\cf17 string\cf2 (\cf17 from\cf2 : timestamp)\
+\
+   \}\
+\
+\
+\
+
+\f1\b \cf4 \cb3 struct
+\f0\b0 \cf2 \cb3  \cf5 \cb3 Message\cf2 \cb3 : \cf6 Identifiable\cf2 , \cf6 Equatable\cf2  \{\
+\
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 id\cf2 : \cf9 String\cf2 \
+\
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 senderid\cf2 : \cf9 String\cf2 \
+\
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 senderUsername\cf2 : \cf9 String\cf2 \
+\
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 content\cf2 : \cf9 String\cf2 \
+\
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 timestamp\cf2 : \cf9 Date\cf2 \
+\
+\
+\
+\}\
+\
+\
+\
+\
+\
+
+\f1\b \cf4 \cb3 struct
+\f0\b0 \cf2 \cb3  \cf5 \cb3 Chat\cf2 \cb3  \{\
+    \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 id\cf2 : \cf9 String\cf2 \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 participantids\cf2 : [\cf9 String\cf2 ]\
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 numbparticipants\cf2 : \cf9 Int\cf2 \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 lastMessage\cf2 : \cf9 String\cf2 \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 updatedTimestamp\cf2 : \cf9 Date\cf2 \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 messages\cf2 : [\cf9 Message\cf2 ] \cf7 \cb3 // Add this property\cf2 \cb3 \
+\
+\}\
+\
+
+\f1\b \cf4 \cb3 class
+\f0\b0 \cf2 \cb3  \cf5 \cb3 SharedData\cf2 \cb3  \{\
+    
+\f1\b \cf4 \cb3 static
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 participantIds\cf2 : [\cf9 String\cf2 ] = []\
+\}\
+\
+    \
+\
+\
+\
+\
+\
+\
+\
+
+\f1\b \cf4 \cb3 struct
+\f0\b0 \cf2 \cb3  \cf5 \cb3 ChatMessage\cf2 \cb3 : \cf9 Codable\cf2  \{\
+    \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 id\cf2 : \cf9 String\cf2 \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 msg\cf2 : \cf9 String\cf2 \
+    
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 imageurl\cf2 : \cf9 String\cf2 \
+    
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  \cf8 updatedTimestamp\cf2 : \cf9 Date\cf2 \
+\}\
+    \
+\
+\
+\
+    \
+\
+
+\f1\b \cf4 \cb3 struct
+\f0\b0 \cf2 \cb3  \cf5 \cb3 ImagePicker\cf2 \cb3 : \cf6 UIViewControllerRepresentable\cf2  \{\
+    \
+    \cf9 @Binding\cf2  
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 selectedImage\cf2 : \cf6 UIImage\cf2 ?\
+    \
+    \cf9 @Environment\cf2 (\\.\cf16 presentationMode\cf2 ) 
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 presentationMode\cf2 \
+    \
+    \
+    \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 makeUIViewController\cf2 (\cf8 context\cf2 : \cf9 UIViewControllerRepresentableContext\cf2 <\cf11 \cb3 ImagePicker\cf2 \cb3 >) -> \cf6 UIImagePickerController\cf2  \{\
+        \
+        
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  imagePicker = \cf6 UIImagePickerController\cf2 ()\
+        \
+        imagePicker.\cf16 sourceType\cf2  = .\cf16 photoLibrary\cf2 \
+        \
+        imagePicker.\cf16 delegate\cf2  = context.\cf16 coordinator\cf2 \
+        \
+        
+\f1\b \cf4 \cb3 return
+\f0\b0 \cf2 \cb3  imagePicker\
+        \
+    \}\
+    \
+    \
+    \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 updateUIViewController\cf2 (\cf8 _\cf2  uiViewController: \cf6 UIImagePickerController\cf2 , \cf8 context\cf2 : \cf9 UIViewControllerRepresentableContext\cf2 <\cf11 \cb3 ImagePicker\cf2 \cb3 >) \{\}\
+    \
+    \
+    \
+    
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 makeCoordinator\cf2 () -> \cf12 \cb3 Coordinator\cf2 \cb3  \{\
+        \
+        \cf12 \cb3 Coordinator\cf2 \cb3 (
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 )\
+        \
+    \}\
+    \
+    \
+    \
+    
+\f1\b \cf4 \cb3 final
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 class
+\f0\b0 \cf2 \cb3  \cf5 \cb3 Coordinator\cf2 \cb3 : \cf6 NSObject\cf2 , \cf6 UINavigationControllerDelegate\cf2 , \cf6 UIImagePickerControllerDelegate\cf2  \{\
+        \
+        
+\f1\b \cf4 \cb3 var
+\f0\b0 \cf2 \cb3  \cf8 parent\cf2 : \cf11 \cb3 ImagePicker\cf2 \cb3 \
+        \
+        \
+        \
+        
+\f1\b \cf4 \cb3 init
+\f0\b0 \cf2 \cb3 (\cf8 _\cf2  parent: \cf11 \cb3 ImagePicker\cf2 \cb3 ) \{\
+            \
+            
+\f1\b \cf4 \cb3 self
+\f0\b0 \cf2 \cb3 .\cf14 parent\cf2  = parent\
+            \
+        \}\
+        \
+        \
+        \
+        
+\f1\b \cf4 \cb3 func
+\f0\b0 \cf2 \cb3  \cf8 imagePickerController\cf2 (\cf8 _\cf2  picker: \cf6 UIImagePickerController\cf2 , \cf8 didFinishPickingMediaWithInfo\cf2  info: [\cf6 UIImagePickerController\cf2 .\cf9 InfoKey\cf2 : 
+\f1\b \cf4 \cb3 Any
+\f0\b0 \cf2 \cb3 ]) \{\
+            \
+            
+\f1\b \cf4 \cb3 if
+\f0\b0 \cf2 \cb3  
+\f1\b \cf4 \cb3 let
+\f0\b0 \cf2 \cb3  selectedImage = info[.\cf16 originalImage\cf2 ] 
+\f1\b \cf4 \cb3 as
+\f0\b0 \cf2 \cb3 ? \cf6 UIImage\cf2  \{\
+                \
+                \cf14 parent\cf2 .\cf14 selectedImage\cf2  = selectedImage\
+                \
+            \}\
+            \
+            \cf14 parent\cf2 .\cf14 presentationMode\cf2 .\cf16 wrappedValue\cf2 .dismiss()\
+            \
+        \}\
+        \
+    \}\
+\}\
+\
+\
+\
+\
+}

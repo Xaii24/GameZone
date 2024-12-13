@@ -1,0 +1,95 @@
+.left-border-image {
+    position: fixed; /* Keeps the image in place even when scrolling */
+    left: 0;
+    top: 0;
+    width: 1.5in;
+    height: 100vh;
+    z-index: -1;
+}
+.right-border-image {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 1.5in;
+    height: 100vh;
+    z-index: -1;
+}
+.top-image {
+    right: 135px;
+    width: 600px;
+    position: absolute;
+    top: -40px;
+}
+.spacer {
+    height: 30px; /*Keeps separation from search bar and top-banner*/
+}
+.top-image1 {
+    position: fixed;
+    right: 545px;
+    width: 350px;
+    height: auto;
+    z-index: 1000;
+    top: 150px;
+}
+.like-button {
+    background-color: #df3822;
+    border: 1px solid #0056b3;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+}
+.like-button:hover {
+    background-color: #0056b3;
+    border-color: #004080;
+}
+.like-info {
+    display: flex;
+    align-items: center;
+    margin-top: -60px;
+    margin-left: 90px;
+    font-weight: bold;
+}
+.action-links {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-top: 50px;
+}
+.search-bar {
+    background-color: #2232df;
+    border: none;
+    margin-top: 40px;
+}
+.search-button {
+    background-color: #2232df;
+    border: none;
+    color: #ffffff;
+}
+.search-button:hover {
+    background-color: #1a1a9b; /* Changes color of button on hover. */
+}
+.custom-button {
+    position: relative;
+    left: 932px;
+    background-color: #2232df;
+    border: none;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.custom-button:hover {
+    background-color: #0817c0;
+    color: #ffffff;
+}
+.h1 {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 600; /* Choose the desired weight */
+    color: #333; /* Optional: set the text color */
+}
+.white-text {
+    color: white !important;
+    background-color: transparent;
+    border: 1px solid white;
+}

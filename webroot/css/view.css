@@ -1,0 +1,95 @@
+/* Full-screen background */
+.background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 12.5vw; /* Set the width to 20% of the viewport width, adjust as needed */
+    height: 100vh; /* Full height */
+    background-image: url('../img/subzero1.png');
+    background-size: cover; /* Adjusts the image to fill the container without distortion */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Keeps the image centered within the container */
+    z-index: -1; /* Keeps the background behind the content */
+}
+.background-layer1 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 12.5vw; /* Set the width to 20% of the viewport width, adjust as needed */
+    height: 100vh; /* Full height */
+    background-image: url('../img/scorpion1.png');
+    background-size: cover; /* Adjusts the image to fill the container without distortion */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Keeps the image centered within the container */
+    z-index: -1; /* Keeps the background behind the content */
+}
+/* Content container */
+.articles-view-container {
+    position: relative; /* Ensures content sits above the background */
+    z-index: 1; /* Above the background */
+    padding: 20px; /* Adjust for better readability */
+}
+.like-buttonview {
+    position: absolute; /* Control the button's position */
+    margin-top: 0px; /* Example: add space above */
+    background-color: #df3822;
+    border: 1px solid #0056b3;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    margin-left: -997px;
+}
+.like-buttonview:hover {
+    background-color: #0056b3;
+    border-color: #004080;
+}
+.like-button-special {
+    position: absolute; /* Control the button's position */
+    margin-top: 0px; /* Example: add space above */
+    background-color: #110e0d;
+    border: 1px solid #0056b3;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    margin-left: -997px;
+}
+.likes-count1 {
+    position: absolute;
+    font-weight: bold;
+    margin-left: 89px;
+    margin-top: 18px; /* Example: add space above */
+}
+.heart1 {
+    position: absolute;
+    margin-left: 99px;
+    margin-top: 19px; /* Example: add space above */
+}
+.article-title {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 600; /* Choose the desired weight */
+    color: #333; /* Optional: set the text color */
+}
+.buttonfloat-right {
+    color: white; /* Text color */
+    background-color: blue; /* Blue background */
+    padding: 10px 10px; /* Add padding to make it look like a button */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+    margin-left: 900px;
+}
+.buttonfloat-right:hover {
+    background-color: darkblue; /* Dark blue on hover */
+    color: white;
+}
+.top-image10 {
+    margin-top: -80px;
+    margin-left: 200px;
+    height: 115px;
+}
+.Delete-View {
+    margin-top: 45px;
+}

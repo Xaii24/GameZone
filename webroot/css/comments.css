@@ -1,0 +1,13 @@
+.comments {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: lightblue; /* background color or comments*/
+}
+.comments th,
+.comments td {
+    border: 1px solid #ddd;
+    padding: 20px; /* Increase padding for more space */
+    height: 100px; /* Optional: Increase the height of the table cells */
+    text-align: left;
+}

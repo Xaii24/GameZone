@@ -1,0 +1,10 @@
+.Rectangle2 {
+    position: relative;
+    top: -30px;
+    left: 55.5px;
+    width: 150%;
+    height: 85px;
+    background-color: black;
+    z-index: -1;
+    border-radius: 15px;
+}
