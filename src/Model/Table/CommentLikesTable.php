@@ -62,13 +62,9 @@ class CommentLikesTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('comment_id')
-            ->notEmptyString('comment_id');
+        $validator->integer('comment_id')->notEmptyString('comment_id');
 
-        $validator
-            ->integer('user_id')
-            ->notEmptyString('user_id');
+        $validator->integer('user_id')->notEmptyString('user_id');
 
         return $validator;
     }
@@ -82,8 +78,12 @@ class CommentLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['comment_id'], 'Comments'), ['errorField' => 'comment_id']);
-        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->existsIn(['comment_id'], 'Comments'), [
+            'errorField' => 'comment_id',
+        ]);
+        $rules->add($rules->existsIn(['user_id'], 'Users'), [
+            'errorField' => 'user_id',
+        ]);
 
         return $rules;
     }

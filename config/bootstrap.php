@@ -87,7 +87,10 @@ if (!$fullBaseUrl) {
     $trustProxy = false;
 
     $s = null;
-    if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
+    if (
+        env('HTTPS') ||
+        ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')
+    ) {
         $s = 's';
     }
 
@@ -122,4 +125,3 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
-
