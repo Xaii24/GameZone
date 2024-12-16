@@ -1,17 +1,29 @@
-/* Full-screen background */
 .background-layer {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url('../img/R2.png');
+    background-image: url('/img/R2.png');
     background-size: cover;
     background-position: center;
-    z-index: -1; /* Keeps the background behind the content */
+    z-index: 5; /* Keeps the background behind the content */
+    display: flex;
+    justify-content: center; /* Centers the form horizontally */
+    align-items: center; /* Centers the form vertically */
+    padding: 20px; /* Optional padding around the form */
 }
-.add-title {
-    font-family: 'Kanit', sans-serif;
-    font-weight: 600; /* Choose the desired weight */
-    color: #333; /* Optional: set the text color */
+
+.form-container {
+    width: 100%;
+    max-width: 800px; /* Adjust the width of the form */
+    margin-right: 450px;
+    padding: 20px;
+    background: rgba(
+        255,
+        255,
+        255,
+        0.8
+    ); /* Optional: background to make the form more readable */
+    border-radius: 10px; /* Optional: round the form's corners */
 }

@@ -8,7 +8,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/', [
         'controller' => 'Pages',
         'action' => 'display',
-        'home',
+        'login',
     ]);
 
     $builder->connect('/pages/*', [

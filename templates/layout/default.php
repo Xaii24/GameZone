@@ -35,6 +35,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework'; ?>
 
  
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
+    <?= $this->Html->css('create.css') ?> 
 
    
 
@@ -42,8 +43,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework'; ?>
       <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Kanit:wght@100;200;300;400;500;600;700;800;900&family=Lacquer&display=swap" rel="stylesheet">
-
-
 
     <style>
             /* Add this CSS to hide the CakePHP logo */
