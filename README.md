@@ -1,7 +1,5 @@
 # CakePHP Project: Game Zone
 
-This project is a CakePHP-based web application that allows users to sign up, create and like articles, and leave comments on article details.
-
 ## 1. Sign In / Sign Up Page
 
 This is the sign-in/sign-up page that allows users to authenticate and gain access to the website. 
