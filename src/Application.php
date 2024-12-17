@@ -75,10 +75,10 @@ class Application extends BaseApplication implements
         // Load the Authorization plugin
         $this->addPlugin('Authorization');
 
-//        // Only add DebugKit if the application is in debug mode (development environment)
-//        if (Configure::read('debug')) {
-//            $this->addPlugin('DebugKit');
-//        }
+        // Only add DebugKit if the application is in debug mode (development environment)
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
+        }
 
         $this->addPlugin('Josegonzalez/Upload');
     }
