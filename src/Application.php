@@ -61,27 +61,29 @@ class Application extends BaseApplication implements
      */
     // src/Application.php
     public function bootstrap(): void
-    {
-        // Call parent to load bootstrap from files.
-        parent::bootstrap();
+     {
+         // Call parent to load bootstrap from files
+         parent::bootstrap();
 
-        if (PHP_SAPI !== 'cli') {
-            FactoryLocator::add(
-                'Table',
-                (new TableLocator())->allowFallbackClass(false)
-            );
-        }
+         if (PHP_SAPI !== 'cli') {
+             FactoryLocator::add(
+                 'Table',
+                 (new TableLocator())->allowFallbackClass(false)
+             );
+         }
 
-        // Load the Authorization plugin
-        $this->addPlugin('Authorization');
+         // Load the Authorization plugin
+         $this->addPlugin('Authorization');
 
-//        // Only add DebugKit if the application is in debug mode (development environment)
-//        if (Configure::read('debug')) {
-//            $this->addPlugin('DebugKit');
-//        }
+         // Load the Upload plugin
+         $this->addPlugin('Josegonzalez/Upload');
 
-        $this->addPlugin('Josegonzalez/Upload');
-    }
+         // Only add DebugKit if the application is in debug mode (development environment)
+         if (Configure::read('debug')) {
+             // This line loads the DebugKit plugin with necessary configurations
+             $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
+         }
+         }
 
 
     public function middleware(
