@@ -59,6 +59,7 @@ class Application extends BaseApplication implements
      *
      * @return void
      */
+    // src/Application.php
     public function bootstrap(): void
     {
         // Call parent to load bootstrap from files.
@@ -74,8 +75,14 @@ class Application extends BaseApplication implements
         // Load the Authorization plugin
         $this->addPlugin('Authorization');
 
+        // Only add DebugKit if the application is in debug mode (development environment)
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
+        }
+
         $this->addPlugin('Josegonzalez/Upload');
     }
+
 
     public function middleware(
         MiddlewareQueue $middlewareQueue
