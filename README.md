@@ -2,7 +2,7 @@
 
 ## 1. Sign In / Sign Up Page
 
-This is the sign-in/sign-up page that allows users to authenticate and gain access to the website. 
+This is the sign-in/sign-up page that allows users to authenticate and gain access to the website.
 
 ![Sign In / Sign Up Page](https://github.com/Xaii24/cake_1000/blob/main/gzone3.png?raw=true)
 
