@@ -61,30 +61,28 @@ class Application extends BaseApplication implements
      */
     // src/Application.php
     public function bootstrap(): void
-     {
-         // Call parent to load bootstrap from files
-         parent::bootstrap();
+    {
+        // Call parent to load bootstrap from files
+        parent::bootstrap();
 
-         if (PHP_SAPI !== 'cli') {
-             FactoryLocator::add(
-                 'Table',
-                 (new TableLocator())->allowFallbackClass(false)
-             );
-         }
+        if (PHP_SAPI !== 'cli') {
+            FactoryLocator::add(
+                'Table',
+                (new TableLocator())->allowFallbackClass(false)
+            );
+        }
 
-         // Load the Authorization plugin
-         $this->addPlugin('Authorization');
+        // Load the Authorization plugin
+        $this->addPlugin('Authorization');
 
-         // Load the Upload plugin
-         $this->addPlugin('Josegonzalez/Upload');
+        // Load the Upload plugin
+        $this->addPlugin('Josegonzalez/Upload');
 
-         // Only add DebugKit if the application is in debug mode (development environment)
-         if (Configure::read('debug')) {
-             // This line loads the DebugKit plugin with necessary configurations
-             $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
-         }
-         }
-
+        //  // Load DebugKit only in debug mode
+        //      if (Configure::read('debug') && env('CAKE_ENV', 'development') === 'development') {
+        //          $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
+        //      }
+    }
 
     public function middleware(
         MiddlewareQueue $middlewareQueue
