@@ -78,10 +78,17 @@ class Application extends BaseApplication implements
         // Load the Upload plugin
         $this->addPlugin('Josegonzalez/Upload');
 
-        //  // Load DebugKit only in debug mode
-        //      if (Configure::read('debug') && env('CAKE_ENV', 'development') === 'development') {
-        //          $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
-        //      }
+        // Load DebugKit only in debug mode
+        if (
+            Configure::read('debug') &&
+            env('CAKE_ENV', 'development') === 'development'
+        ) {
+            $this->addPlugin('DebugKit', [
+                'bootstrap' => true,
+                'routes' => true,
+                'middleware' => true,
+            ]);
+        }
     }
 
     public function middleware(
