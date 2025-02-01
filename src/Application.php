@@ -27,6 +27,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Core\Plugin;
 
 // In src/Application.php add the following imports
 use Authentication\AuthenticationService;
@@ -78,16 +79,14 @@ class Application extends BaseApplication implements
         // Load the Upload plugin
         $this->addPlugin('Josegonzalez/Upload');
 
-        // Load DebugKit only in debug mode
-        if (
-            Configure::read('debug') &&
-            env('CAKE_ENV', 'development') === 'development'
-        ) {
-            $this->addPlugin('DebugKit', [
-                'bootstrap' => true,
-                'routes' => true,
-                'middleware' => true,
-            ]);
+        //  // Load DebugKit only in debug mode
+        //      if (Configure::read('debug') && env('CAKE_ENV', 'development') === 'development') {
+        //          $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
+        //      }
+
+        // Load DebugKit plugin only when in debug mode
+        if (Configure::read('debug') && !Plugin::isLoaded('DebugKit')) {
+            $this->addPlugin('DebugKit');
         }
     }
 
