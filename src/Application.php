@@ -84,10 +84,10 @@ class Application extends BaseApplication implements
         //          $this->addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true, 'middleware' => true]);
         //      }
 
-        // Load DebugKit plugin only when in debug mode
-        if (Configure::read('debug') && !Plugin::isLoaded('DebugKit')) {
-            $this->addPlugin('DebugKit');
-        }
+        // // Load DebugKit plugin only when in debug mode
+        // if (Configure::read('debug') && !Plugin::isLoaded('DebugKit')) {
+        //     $this->addPlugin('DebugKit');
+        // }
     }
 
     public function middleware(
