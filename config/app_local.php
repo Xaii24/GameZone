@@ -35,38 +35,38 @@ return [
      *
      * See app.php for more configuration options.
      */
-    // 'Datasources' => [
-    //     'default' => [
-    //         'className' => 'Cake\Database\Connection',
-    //         'driver' => 'Cake\Database\Driver\Mysql',
-    //         'persistent' => false,
-    //         'host' => 'localhost', // Database host, assuming it's local
-    //         'username' => 'root', // Database username
-    //         'password' => 'Oakhill15!', // Password for 'root' (leave blank if none)
-    //         'database' => 'cake_1000', // Name of your database
-    //         'encoding' => 'utf8mb4',
-    //         'timezone' => 'UTC',
-    //         'cacheMetadata' => true,
-    //         'quoteIdentifiers' => false,
-    //         'log' => true,
-    //         'url' => null, // No URL needed, assuming you're not using JawsDB
-    //     ],
-
     'Datasources' => [
         'default' => [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => getenv('DB_HOST'),
-            'username' => getenv('DB_USERNAME'),
-            'password' => getenv('DB_PASSWORD'),
-            'database' => getenv('DB_DATABASE'),
+            'host' => 'localhost', // Database host, assuming it's local
+            'username' => 'root', // Database username
+            'password' => 'Oakhill15!', // Password for 'root' (leave blank if none)
+            'database' => 'cake_1000', // Name of your database
             'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
-            'log' => false, // Disable logging in production
+            'log' => true,
+            'url' => null, // No URL needed, assuming you're not using JawsDB
         ],
+
+        // 'Datasources' => [
+        //     'default' => [
+        //         'className' => 'Cake\Database\Connection',
+        //         'driver' => 'Cake\Database\Driver\Mysql',
+        //         'persistent' => false,
+        //         'host' => getenv('DB_HOST'),
+        //         'username' => getenv('DB_USERNAME'),
+        //         'password' => getenv('DB_PASSWORD'),
+        //         'database' => getenv('DB_DATABASE'),
+        //         'encoding' => 'utf8mb4',
+        //         'timezone' => 'UTC',
+        //         'cacheMetadata' => true,
+        //         'quoteIdentifiers' => false,
+        //         'log' => false, // Disable logging in production
+        //     ],
         /*
          * The test connection is used during the test suite.
          */
