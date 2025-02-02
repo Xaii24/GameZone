@@ -57,33 +57,16 @@ return [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' =>
-                'lyl3nln24eqcxxot.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-            'username' => 'xauch0u1qd84mknd',
-            'password' => 'gu4szv1e2h2s1j26',
-            'database' => 'r5mpqr6ng3f7957z',
+            'host' => getenv('DB_HOST'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'database' => getenv('DB_DATABASE'),
             'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false, // Disable logging in production
         ],
-
-        // 'Datasources' => [
-        //     'default' => [
-        //         'className' => 'Cake\Database\Connection',
-        //         'driver' => 'Cake\Database\Driver\Mysql',
-        //         'persistent' => false,
-        //         'host' => getenv('DB_HOST'),
-        //         'username' => getenv('DB_USERNAME'),
-        //         'password' => getenv('DB_PASSWORD'),
-        //         'database' => getenv('DB_DATABASE'),
-        //         'encoding' => 'utf8mb4',
-        //         'timezone' => 'UTC',
-        //         'cacheMetadata' => true,
-        //         'quoteIdentifiers' => false,
-        //         'log' => false, // Disable logging in production
-        //     ],
         /*
          * The test connection is used during the test suite.
          */
