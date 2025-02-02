@@ -43,6 +43,10 @@ use Cake\Utility\Security;
  */
 require CAKE . 'functions.php';
 
+if (Configure::read('debug') === true) {
+    Plugin::load('DebugKit');
+}
+
 try {
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
