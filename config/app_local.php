@@ -54,19 +54,18 @@ return [
 
     'Datasources' => [
         'default' => [
-            'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => getenv('DB_HOST'),
-            'username' => getenv('DB_USERNAME'),
-            'password' => getenv('DB_PASSWORD'),
-            'database' => getenv('DB_DATABASE'),
-            'encoding' => 'utf8mb4',
+            'host' =>
+                'lyl3nln24eqcxxot.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+            'username' => 'xauch0u1qd84mknd',
+            'password' => 'gu4szv1e2h2s1j26',
+            'database' => 'r5mpqr6ng3f7957z',
+            'encoding' => 'utf8',
             'timezone' => 'UTC',
-            'cacheMetadata' => true,
-            'quoteIdentifiers' => false,
-            'log' => false, // Disable logging in production
+            'flags' => [],
         ],
+
         /*
          * The test connection is used during the test suite.
          */
