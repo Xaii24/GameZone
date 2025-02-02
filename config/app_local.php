@@ -52,38 +52,38 @@ return [
     //         'url' => null, // No URL needed, assuming you're not using JawsDB
     //     ],
 
+    // 'Datasources' => [
+    //     'default' => [
+    //         'className' => 'Cake\Database\Connection',
+    //         'driver' => 'Cake\Database\Driver\Mysql',
+    //         'persistent' => false,
+    //         'host' => 'mysql.railway.internal', // Hardcoded Railway MySQL host
+    //         'username' => 'root', // Default username for MySQL on Railway
+    //         'password' => 'UcUWYCZiBvkURRMWozluHRpkmpbseXgy', // Hardcoded password from Railway
+    //         'database' => 'railway', // Hardcoded database name from Railway
+    //         'encoding' => 'utf8mb4',
+    //         'timezone' => 'UTC',
+    //         'cacheMetadata' => true,
+    //         'quoteIdentifiers' => false,
+    //         'log' => true,
+    //         'url' => null, // No URL needed
+    //     ],
+
     'Datasources' => [
         'default' => [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => 'mysql.railway.internal', // Hardcoded Railway MySQL host
-            'username' => 'root', // Default username for MySQL on Railway
-            'password' => 'UcUWYCZiBvkURRMWozluHRpkmpbseXgy', // Hardcoded password from Railway
-            'database' => 'railway', // Hardcoded database name from Railway
+            'host' => getenv('DB_HOST'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'database' => getenv('DB_DATABASE'),
             'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
-            'log' => true,
-            'url' => null, // No URL needed
+            'log' => false, // Disable logging in production
         ],
-
-        // 'Datasources' => [
-        //     'default' => [
-        //         'className' => 'Cake\Database\Connection',
-        //         'driver' => 'Cake\Database\Driver\Mysql',
-        //         'persistent' => false,
-        //         'host' => getenv('DB_HOST'),
-        //         'username' => getenv('DB_USERNAME'),
-        //         'password' => getenv('DB_PASSWORD'),
-        //         'database' => getenv('DB_DATABASE'),
-        //         'encoding' => 'utf8mb4',
-        //         'timezone' => 'UTC',
-        //         'cacheMetadata' => true,
-        //         'quoteIdentifiers' => false,
-        //         'log' => false, // Disable logging in production
-        //     ],
         /*
          * The test connection is used during the test suite.
          */
