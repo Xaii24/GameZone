@@ -1,12 +1,11 @@
-# CakePHP specific files #
+# CakePHP specific files
 ##########################
 /.env
 /logs/*
 /tmp/*
 /vendor/*
 
-
-# OS generated files #
+# OS generated files
 ######################
 .DS_Store
 .DS_Store?
@@ -19,7 +18,7 @@ ehthumbs.db
 Thumbs.db
 .directory
 
-# Tool specific files #
+# Tool specific files
 #######################
 # PHPUnit
 .phpunit.cache
@@ -45,8 +44,11 @@ nbproject/*
 .nova
 # Sass preprocessor
 .sass-cache/
-# node
 /node_modules/*
 # yarn
 yarn-debug.log
 yarn-error.log
+
+# Backup SQL file
+##################
+cake_1000_backup.sql
