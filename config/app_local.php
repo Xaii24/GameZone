@@ -52,15 +52,29 @@ return [
     //         'url' => null, // No URL needed, assuming you're not using JawsDB
     //     ],
 
+    // 'Datasources' => [
+    //     'default' => [
+    //         'className' => 'Cake\Database\Connection',
+    //         'driver' => 'Cake\Database\Driver\Mysql',
+    //         'persistent' => false,
+    //         'host' => env('DB_HOST', 'localhost'),
+    //         'username' => env('DB_USERNAME', 'root'),
+    //         'password' => env('DB_PASSWORD', ''),
+    //         'database' => env('DB_NAME', 'my_database'),
+    //         'encoding' => 'utf8',
+    //         'timezone' => 'UTC',
+    //         'flags' => [],
+    //     ],
+
     'Datasources' => [
         'default' => [
+            'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' =>
-                'lyl3nln24eqcxxot.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-            'username' => 'xauch0u1qd84mknd',
-            'password' => 'gu4szv1e2h2s1j26',
-            'database' => 'r5mpqr6ng3f7957z',
+            'host' => env('DB_HOST', 'localhost'), // use environment variable for host
+            'username' => env('DB_USERNAME', 'root'), // use environment variable for username
+            'password' => env('DB_PASSWORD', ''), // use environment variable for password
+            'database' => env('DB_NAME', 'my_database'), // use environment variable for database
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'flags' => [],
