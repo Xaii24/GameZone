@@ -71,10 +71,10 @@ return [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => env('DB_HOST', 'localhost'), // use environment variable for host
-            'username' => env('DB_USERNAME', 'root'), // use environment variable for username
-            'password' => env('DB_PASSWORD', ''), // use environment variable for password
-            'database' => env('DB_NAME', 'my_database'), // use environment variable for database
+            'host' => env('DB_HOST'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'database' => env('DB_NAME'),
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'flags' => [],
