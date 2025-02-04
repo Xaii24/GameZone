@@ -131,10 +131,59 @@ class CommentsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    // public function delete($id = null)
+    // {
+    //     \Cake\Log\Log::write('debug', 'Delete method called');
+    //     \Cake\Log\Log::write('debug', 'Article ID: ' . $id);
+
+    //     $this->Authorization->skipAuthorization();
+
+    //     $this->request->allowMethod(['post', 'delete']);
+
+    //     // Retrieve the comment from the database using the provided ID
+    //     $comment = $this->Comments->get($id);
+
+    //     // Get the currently authenticated user
+    //     $user = $this->request->getAttribute('identity');
+
+    //     // Check if the logged-in user is the owner of the comment
+    //     if ($comment->user_id !== $user->getIdentifier()) {
+    //         // If not the owner, show an error message
+    //         $this->Flash->error(
+    //             __('You are not authorized to delete that comment.')
+    //         );
+
+    //         // Redirect back to the article view page
+    //         return $this->redirect([
+    //             'controller' => 'Articles',
+    //             'action' => 'view',
+    //             $comment->article_id, // Redirect to the article where the comment belongs
+    //         ]);
+    //     }
+
+    //     // Proceed with the deletion if the user is the owner
+    //     if ($this->Comments->delete($comment)) {
+    //         $this->Flash->success(__('The comment has been deleted.'));
+    //     } else {
+    //         $this->Flash->error(
+    //             __('The comment could not be deleted. Please, try again.')
+    //         );
+    //     }
+
+    //     // Redirect back to the article view page
+    //     return $this->redirect(
+    //         $this->referer([
+    //             'controller' => 'Articles',
+    //             'action' => 'view',
+    //             $comment->article_id, // Ensure the user is taken back to the article page
+    //         ])
+    //     );
+    // }
+
     public function delete($id = null)
     {
         \Cake\Log\Log::write('debug', 'Delete method called');
-        \Cake\Log\Log::write('debug', 'Article ID: ' . $id);
+        \Cake\Log\Log::write('debug', 'Comment ID: ' . $id);
 
         $this->Authorization->skipAuthorization();
 
@@ -153,7 +202,7 @@ class CommentsController extends AppController
                 __('You are not authorized to delete that comment.')
             );
 
-            // Redirect back to the article view page
+            // Explicitly redirect to the article's view page
             return $this->redirect([
                 'controller' => 'Articles',
                 'action' => 'view',
@@ -170,13 +219,11 @@ class CommentsController extends AppController
             );
         }
 
-        // Redirect back to the article view page
-        return $this->redirect(
-            $this->referer([
-                'controller' => 'Articles',
-                'action' => 'view',
-                $comment->article_id, // Ensure the user is taken back to the article page
-            ])
-        );
+        // Explicitly redirect back to the article view page
+        return $this->redirect([
+            'controller' => 'Articles',
+            'action' => 'view',
+            $comment->article_id, // Ensure the user is taken back to the article page
+        ]);
     }
 }
