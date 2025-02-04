@@ -5,12 +5,6 @@ use Cake\Routing\RouteBuilder;
 $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
-    // Set the homepage to be handled by ArticlesController -> index
-    $builder->connect('/', [
-        'controller' => 'Articles',
-        'action' => 'index',
-    ]);
-
     // Add other routes here
     $builder->connect('/articles/delete/:slug', [
         'controller' => 'Articles',
