@@ -17,6 +17,13 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'action' => 'delete',
     ]);
 
+    $routes
+        ->connect('/comments/like/:id', [
+            'controller' => 'CommentsLikes',
+            'action' => 'add',
+        ])
+        ->setPass(['id']);
+
     $builder->connect('/articles/view/:slug', [
         'controller' => 'Articles',
         'action' => 'view',

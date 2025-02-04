@@ -85,7 +85,11 @@ class CommentLikesController extends AppController
             );
         }
 
-        return $this->redirect($this->request->referer());
+        return $this->redirect([
+            'controller' => 'Articles',
+            'action' => 'view',
+            $articleId,
+        ]);
     }
 
     /**
