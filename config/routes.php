@@ -17,7 +17,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'action' => 'delete',
     ]);
 
-    $routes
+    $builder
         ->connect('/comments/like/:id', [
             'controller' => 'CommentsLikes',
             'action' => 'add',
