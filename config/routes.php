@@ -5,9 +5,10 @@ use Cake\Routing\RouteBuilder;
 $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
-    $builder->connect('/pages/*', [
+    $builder->connect('/', [
         'controller' => 'Pages',
         'action' => 'display',
+        'login',
     ]);
 
     $builder->fallbacks();
