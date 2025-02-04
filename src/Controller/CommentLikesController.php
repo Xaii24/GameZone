@@ -129,10 +129,10 @@ class CommentLikesController extends AppController
             );
         }
 
-        $comment = $this->CommentLikes->Comments->get(
-            $commentId,
-            contain: ['Articles']
-        );
+        // Retrieve the comment to get the associated article slug
+        $comment = $this->CommentLikes->Comments->get($commentId, [
+            'contain' => ['Articles'],
+        ]);
 
         // Redirect to the article view page
         return $this->redirect([
@@ -141,6 +141,60 @@ class CommentLikesController extends AppController
             $comment->article->slug,
         ]);
     }
+
+    // public function add($commentId = null)
+    // {
+    //     $this->Authorization->skipAuthorization();
+
+    //     // Allow POST requests
+    //     $this->request->allowMethod(['post']);
+
+    //     // Check if commentId is null
+    //     if ($commentId === null) {
+    //         $this->Flash->error(__('Invalid comment.'));
+    //         return $this->redirect($this->referer());
+    //     }
+
+    //     // Get the current user's ID
+    //     $userId = $this->request->getAttribute('identity')->get('id');
+
+    //     // Check if the user has already liked this comment
+    //     $existingLike = $this->CommentLikes
+    //         ->find()
+    //         ->where(['comment_id' => $commentId, 'user_id' => $userId])
+    //         ->first();
+
+    //     if ($existingLike) {
+    //         $this->Flash->error(__('You have already liked this comment.'));
+    //         return $this->redirect($this->referer());
+    //     }
+
+    //     // Create a new like entity
+    //     $like = $this->CommentLikes->newEmptyEntity();
+    //     $like->comment_id = $commentId;
+    //     $like->user_id = $userId;
+
+    //     // Save the like
+    //     if ($this->CommentLikes->save($like)) {
+    //         $this->Flash->success(__('The comment has been liked.'));
+    //     } else {
+    //         $this->Flash->error(
+    //             __('Unable to like the comment. Please try again.')
+    //         );
+    //     }
+
+    //     $comment = $this->CommentLikes->Comments->get(
+    //         $commentId,
+    //         contain: ['Articles']
+    //     );
+
+    //     // Redirect to the article view page
+    //     return $this->redirect([
+    //         'controller' => 'Articles',
+    //         'action' => 'view',
+    //         $comment->article->slug,
+    //     ]);
+    // }
 
     /**
      * Edit method
