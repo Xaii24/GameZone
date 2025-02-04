@@ -76,6 +76,8 @@ class CommentLikesController extends AppController
         $like->comment_id = $commentId;
         $like->user_id = $userId;
 
+        $article = $this->Comments->Articles->get($comment->article_id);
+
         // Save the like
         if ($this->CommentLikes->save($like)) {
             $this->Flash->success(__('The comment has been liked.'));
