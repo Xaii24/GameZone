@@ -84,11 +84,10 @@ class CommentLikesController extends AppController
                 __('Unable to like the comment. Please try again.')
             );
         }
-
         return $this->redirect([
             'controller' => 'Articles',
             'action' => 'view',
-            $articleId,
+            $comment->article->slug,
         ]);
     }
 

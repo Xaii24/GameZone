@@ -84,18 +84,24 @@
                     <?= $this->Form->end() ?>
                 </td>
                 <td>
-    <?= $this->Form->create(null, [
-        'url' => [
-            'controller' => 'CommentLikes',
-            'action' => 'add',
-            $comment->id,
-        ],
-        'type' => 'post',
-    ]) ?>
-    <?= $this->Form->button(__('❤️ Like'), [
-        'class' => 'like-buttonview',
-    ]) ?> <!-- Added class 'like-button' -->
-    <?= $this->Form->end() ?>
+                <?= $this->Form->create(null, [
+                    'url' => [
+                        'controller' => 'CommentLikes',
+                        'action' => 'add',
+                        $comment->id,
+                    ],
+                    'type' => 'post',
+                    'context' => [
+                        'action' => 'view',
+                        'controller' => 'Articles',
+                        'pass' => [$article->slug],
+                    ], // Ensure you are passing the right article data
+                ]) ?>
+<?= $this->Form->button(__('❤️ Like'), [
+    'class' => 'like-buttonview',
+]) ?>
+<?= $this->Form->end() ?>
+
 </td>
             </tr>
         <?php endforeach; ?>

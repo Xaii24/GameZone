@@ -7,8 +7,9 @@ $routes->setRouteClass(DashedRoute::class);
 $routes->scope('/', function (RouteBuilder $builder) {
     // Set the homepage to be handled by ArticlesController -> index
     $builder->connect('/', [
-        'controller' => 'Articles',
-        'action' => 'index',
+        'controller' => 'Pages', // Use Pages controller (or your choice) for dynamic rendering
+        'action' => 'display',
+        'home', // This will match the 'home' view file inside Pages
     ]);
 
     // Add other routes here
