@@ -129,10 +129,10 @@ class CommentLikesController extends AppController
             );
         }
 
-        // Retrieve the comment to get the associated article slug
-        $comment = $this->CommentLikes->Comments->get($commentId, [
-            'contain' => ['Articles'],
-        ]);
+        $comment = $this->CommentLikes->Comments->get(
+            $commentId,
+            contain: ['Articles']
+        );
 
         // Redirect to the article view page
         return $this->redirect([
