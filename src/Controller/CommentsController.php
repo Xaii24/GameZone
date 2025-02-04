@@ -133,12 +133,19 @@ class CommentsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
+        \Cake\Log\Log::write('debug', 'Delete method called');
+        \Cake\Log\Log::write('debug', 'Article ID: ' . $id);
 
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
 
-        // Retrieve the comment from the database using the provided ID
-        $comment = $this->Comments->get($id);
+        try {
+            // Retrieve the comment from the database using the provided ID
+            $comment = $this->Comments->get($id);
+        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+            $this->Flash->error(__('Comment not found.'));
+            return $this->redirect($this->referer());
+        }
 
         // Get the currently authenticated user
         $user = $this->request->getAttribute('identity');
@@ -149,11 +156,10 @@ class CommentsController extends AppController
             $this->Flash->error(
                 __('You are not authorized to delete that comment.')
             );
-            // Redirect to the article view page
             return $this->redirect([
                 'controller' => 'Articles',
                 'action' => 'view',
-                $comment->article_id,
+                $comment->article_id, // Redirect to the article where the comment belongs
             ]);
         }
 
@@ -166,10 +172,13 @@ class CommentsController extends AppController
             );
         }
 
-        // Ensure the article data is available after deleting the comment
-        $article = $this->Articles->get($comment->article_id);
+        // Load the Articles model
+        $articlesTable = TableRegistry::getTableLocator()->get('Articles');
 
-        // Explicitly redirect back to the article view page
+        // Get the article using the article_id from the comment
+        $article = $articlesTable->get($comment->article_id);
+
+        // Redirect to the article page, after deletion
         return $this->redirect([
             'controller' => 'Articles',
             'action' => 'view',
