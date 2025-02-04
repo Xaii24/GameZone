@@ -23,3 +23,13 @@ $routes->connect('/articles/delete/:slug', [
     'controller' => 'Articles',
     'action' => 'delete',
 ]);
+
+$routes->connect('/articles/view/:slug', [
+    'controller' => 'Articles',
+    'action' => 'view',
+]);
+
+$routes->connect('/comments/view/:id', [
+    'controller' => 'Comments',
+    'action' => 'view',
+]);

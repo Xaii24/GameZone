@@ -68,7 +68,11 @@ class LikesController extends AppController
             );
         }
 
-        return $this->redirect($this->referer());
+        return $this->redirect([
+            'controller' => 'Articles',
+            'action' => 'view',
+            $articleId,
+        ]);
     }
 
     /**
