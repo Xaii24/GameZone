@@ -16,10 +16,10 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'action' => 'display',
     ]);
 
-    $routes->connect('/articles/delete/:slug', [
-        'controller' => 'Articles',
-        'action' => 'delete',
-    ]);
-
     $builder->fallbacks();
 });
+
+$routes->connect('/articles/delete/:slug', [
+    'controller' => 'Articles',
+    'action' => 'delete',
+]);
