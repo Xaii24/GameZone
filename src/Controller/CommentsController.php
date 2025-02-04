@@ -170,11 +170,6 @@ class CommentsController extends AppController
             );
         }
 
-        // Explicitly redirect back to the article view page
-        return $this->redirect([
-            'controller' => 'Articles',
-            'action' => 'view',
-            $comment->article_id, // Ensure the user is taken back to the article page
-        ]);
+        return $this->redirect(['action' => 'view']);
     }
 }
