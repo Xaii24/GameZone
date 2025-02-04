@@ -11,11 +11,6 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'login',
     ]);
 
-    $builder->connect('/pages/*', [
-        'controller' => 'Pages',
-        'action' => 'display',
-    ]);
-
     $builder->fallbacks();
 });
 
