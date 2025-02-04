@@ -15,8 +15,6 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'controller' => 'Pages',
         'action' => 'display',
     ]);
-
-    $builder->fallbacks();
 });
 
 $routes->connect('/articles/delete/:slug', [
