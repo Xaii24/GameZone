@@ -5,42 +5,28 @@ use Cake\Routing\RouteBuilder;
 $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
-    // Fallback route for the homepage, allowing dynamic control
+    // Set the homepage to be handled by ArticlesController -> index
     $builder->connect('/', [
-        'controller' => 'Pages', // Use Pages controller (or your choice) for dynamic rendering
-        'action' => 'display',
-        'home', // This will match the 'home' view file inside Pages
+        'controller' => 'Articles',
+        'action' => 'index',
     ]);
 
-    // Custom routes
-    $builder
-        ->connect('/articles/delete/:slug', [
-            'controller' => 'Articles',
-            'action' => 'delete',
-        ])
-        ->setPass(['slug']);
+    // Add other routes here
+    $builder->connect('/articles/delete/:slug', [
+        'controller' => 'Articles',
+        'action' => 'delete',
+    ]);
 
-    $builder
-        ->connect('/articles/view/:slug', [
-            'controller' => 'Articles',
-            'action' => 'view',
-        ])
-        ->setPass(['slug']);
+    $builder->connect('/articles/view/:slug', [
+        'controller' => 'Articles',
+        'action' => 'view',
+    ]);
 
-    $builder
-        ->connect('/comments/view/:id', [
-            'controller' => 'Comments',
-            'action' => 'view',
-        ])
-        ->setPass(['id']);
+    $builder->connect('/comments/view/:id', [
+        'controller' => 'Comments',
+        'action' => 'view',
+    ]);
 
-    $builder
-        ->connect('/comments/like/:id', [
-            'controller' => 'CommentsLikes',
-            'action' => 'add',
-        ])
-        ->setPass(['id']);
-
-    // Fallback for other controllers
+    // Fallback route (default route for other controllers)
     $builder->fallbacks();
 });
