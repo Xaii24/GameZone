@@ -95,7 +95,12 @@ class LikesController extends AppController
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this article.'));
-            return $this->redirect($this->referer());
+            return $this->redirect(
+                $this->referer() ?: [
+                    'controller' => 'Articles',
+                    'action' => 'index',
+                ]
+            );
         }
 
         // Create a new like entity
