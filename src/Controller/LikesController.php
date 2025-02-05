@@ -97,8 +97,8 @@ class LikesController extends AppController
             $this->Flash->error(__('You have already liked this article.'));
             return $this->redirect([
                 'controller' => 'Articles',
-                'action' => 'view',
-                $articleId,
+                'action' => 'index',
+                $article->slug,
             ]);
         }
 
