@@ -87,6 +87,29 @@ class LikesController extends AppController
         // Get the current user's ID
         $userId = $this->request->getAttribute('identity')->get('id');
 
+        // Load the Articles table
+        $articlesTable = \Cake\ORM\TableRegistry::getTableLocator()->get(
+            'Articles'
+        );
+
+        // Fetch the article by ID (to get its slug)
+        $article = $articlesTable
+            ->find()
+            ->select(['id', 'slug'])
+            ->where(['id' => $articleId])
+            ->first();
+
+        // If article doesn't exist, return an error
+        if (!$article) {
+            $this->Flash->error(__('Article not found.'));
+            return $this->redirect(
+                $this->referer() ?: [
+                    'controller' => 'Articles',
+                    'action' => 'index',
+                ]
+            );
+        }
+
         // Check if the user has already liked this article
         $existingLike = $this->Likes
             ->find()
@@ -97,8 +120,8 @@ class LikesController extends AppController
             $this->Flash->error(__('You have already liked this article.'));
             return $this->redirect([
                 'controller' => 'Articles',
-                'action' => 'index',
-                $article->slug,
+                'action' => 'view',
+                $article->slug, // Now safe to use
             ]);
         }
 
@@ -116,18 +139,10 @@ class LikesController extends AppController
             );
         }
 
-        // Load the Articles table
-        $articlesTable = \Cake\ORM\TableRegistry::getTableLocator()->get(
-            'Articles'
-        );
-
-        // Fetch the article using its ID
-        $article = $articlesTable->get($articleId);
-
         // Redirect to the article view page using slug
         return $this->redirect([
             'controller' => 'Articles',
-            'action' => 'index',
+            'action' => 'view',
             $article->slug,
         ]);
     }
