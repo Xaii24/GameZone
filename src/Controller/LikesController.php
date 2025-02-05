@@ -123,7 +123,7 @@ class LikesController extends AppController
         // Redirect to the article view page using slug
         return $this->redirect([
             'controller' => 'Articles',
-            'action' => 'view',
+            'action' => 'index',
             $article->slug,
         ]);
     }
