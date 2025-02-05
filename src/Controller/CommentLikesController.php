@@ -112,8 +112,8 @@ class CommentLikesController extends AppController
         // Fetch the comment with its related article
         $comment = $this->CommentLikes->Comments->get(
             $commentId,
-            ['contain' => ['Articles']] // Ensure the article is loaded with the comment
-        );
+            contain: ['Articles']
+        ); // Updated to use named arguments
 
         // If no comment or no related article, return an error
         if (!$comment || !$comment->article) {
@@ -124,19 +124,13 @@ class CommentLikesController extends AppController
         // Check if the user has already liked this comment
         $existingLike = $this->CommentLikes
             ->find()
-            ->select(['id', 'slug'])
             ->where(['comment_id' => $commentId, 'user_id' => $userId])
             ->first();
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
             // No redirect here, the page stays the same
-            return $this->redirect(
-                $this->referer() ?: [
-                    'controller' => 'Articles',
-                    'action' => 'view',
-                ]
-            );
+            return $this->redirect($this->referer()); // Stay on the current page
         }
 
         // Create a new like entity
@@ -160,7 +154,6 @@ class CommentLikesController extends AppController
             $comment->article->slug,
         ]);
     }
-
     /**
      * Edit method
      *
