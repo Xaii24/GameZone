@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\ORM\TableRegistry;
 
 /**
  * Comments Controller
@@ -131,6 +132,7 @@ class CommentsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
     public function delete($id = null)
     {
         \Cake\Log\Log::write('debug', 'Delete method called');
