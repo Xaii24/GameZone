@@ -109,16 +109,21 @@ class CommentLikesController extends AppController
             'Articles'
         );
 
-        // Fetch the comment with its related article
+        // Fetch the comment with its associated article
         $comment = $this->CommentLikes->Comments->get(
             $commentId,
             contain: ['Articles']
-        ); // Updated to use named arguments
+        ); // Using named argument
 
-        // If no comment or no related article, return an error
+        // If the comment doesn't exist or doesn't have a related article, return an error
         if (!$comment || !$comment->article) {
             $this->Flash->error(__('Invalid comment or article.'));
-            return $this->redirect($this->referer());
+            return $this->redirect(
+                $this->referer() ?: [
+                    'controller' => 'Articles',
+                    'action' => 'index',
+                ]
+            );
         }
 
         // Check if the user has already liked this comment
@@ -129,7 +134,7 @@ class CommentLikesController extends AppController
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
-            // No redirect here, the page stays the same
+            // No need to redirect to a new page, stay on the same page
             return $this->redirect($this->referer()); // Stay on the current page
         }
 
@@ -151,9 +156,10 @@ class CommentLikesController extends AppController
         return $this->redirect([
             'controller' => 'Articles',
             'action' => 'view',
-            $comment->article->slug,
+            $comment->article->slug, // Using the article's slug
         ]);
     }
+
     /**
      * Edit method
      *
