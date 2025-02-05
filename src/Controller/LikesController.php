@@ -120,7 +120,7 @@ class LikesController extends AppController
             $this->Flash->error(__('You have already liked this article.'));
             return $this->redirect([
                 'controller' => 'Articles',
-                'action' => 'view',
+                'action' => 'index',
                 $article->slug, // Now safe to use
             ]);
         }
@@ -142,7 +142,7 @@ class LikesController extends AppController
         // Redirect to the article view page using slug
         return $this->redirect([
             'controller' => 'Articles',
-            'action' => 'view',
+            'action' => 'index',
             $article->slug,
         ]);
     }
