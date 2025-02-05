@@ -62,20 +62,33 @@ class UsersController extends AppController
         $this->Authorization->skipAuthorization();
 
         if ($this->request->is(['post', 'put', 'patch'])) {
+            // Patch the user data from the form submission
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            // Save the user to the database
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('User Created.'));
-                // Redirect to the ArticlesController index action after saving
+                // Now authenticate the user after successful registration
+                $this->Authentication->setIdentity($user); // Manually authenticate the user
+
+                // Success flash message
+                $this->Flash->success(
+                    __('User Created and Logged In Successfully!')
+                );
+
+                // Redirect to the ArticlesController index action after successful registration and login
                 return $this->redirect([
                     'controller' => 'Articles',
                     'action' => 'index',
                 ]);
             }
+
+            // Display an error message if the user could not be saved
             $this->Flash->error(
                 __('The user could not be saved. Please, try again.')
             );
         }
 
+        // Pass the user data to the view
         $this->set(compact('user'));
         $this->render('_form');
     }
@@ -125,26 +138,18 @@ class UsersController extends AppController
         $this->request->allowMethod(['get', 'post']);
 
         $result = $this->Authentication->getResult();
-
-        // Check if the authentication is successful
+        // Get the result of the authentication process
         if ($result && $result->isValid()) {
-            // Get the user entity
-            $user = $result->getData();
-
-            // Set the authenticated user identity
-            $this->Authentication->setIdentity($user);
-
-            // Redirect to the page they were trying to access or to the Articles index
+            // redirect to /articles after login success
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'Articles',
                 'action' => 'index',
             ]);
             return $this->redirect($redirect);
         }
-
-        // Display error message if login fails
+        // display error
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error(__('Invalid username or password.'));
+            $this->Flash->error(__('Invalid username or password'));
         }
     }
 
