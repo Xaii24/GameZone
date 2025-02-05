@@ -33,7 +33,7 @@
     <!-- <img src="img/Rectangle.png" alt="Rectangle" class="Rectangle"> -->
     <img src="<?= $this->Url->image(
         'Rectangle.png'
-    ) ?>" class="Rectangle-gif" alt="Rectangle">
+    ) ?>" class="Rectangle" alt="Rectangle">
     
 </div>
 

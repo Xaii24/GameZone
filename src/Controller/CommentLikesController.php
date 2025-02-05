@@ -91,17 +91,13 @@ class CommentLikesController extends AppController
     public function add($commentId = null)
     {
         $this->Authorization->skipAuthorization();
-
-        // Allow POST requests
         $this->request->allowMethod(['post']);
 
-        // Check if commentId is null
         if ($commentId === null) {
             $this->Flash->error(__('Invalid comment.'));
             return $this->redirect($this->referer());
         }
 
-        // Get the current user's ID
         $userId = $this->request->getAttribute('identity')->get('id');
 
         // Check if the user has already liked this comment
@@ -110,13 +106,27 @@ class CommentLikesController extends AppController
             ->where(['comment_id' => $commentId, 'user_id' => $userId])
             ->first();
 
+        // Load the Articles table
+        $articlesTable = \Cake\ORM\TableRegistry::getTableLocator()->get(
+            'Articles'
+        );
+
+        // Load the comment with the related article
+        $comment = $this->CommentLikes->Comments->get($commentId, [
+            'contain' => ['Articles'],
+        ]);
+
+        if (!$comment || !$comment->article) {
+            $this->Flash->error(__('Invalid comment or article.'));
+            return $this->redirect($this->referer());
+        }
+
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
-
             return $this->redirect([
                 'controller' => 'Articles',
                 'action' => 'view',
-                $article->slug, // Now safe to use
+                $comment->article->slug, // Now using the correct article slug
             ]);
         }
 
@@ -125,7 +135,6 @@ class CommentLikesController extends AppController
         $like->comment_id = $commentId;
         $like->user_id = $userId;
 
-        // Save the like
         if ($this->CommentLikes->save($like)) {
             $this->Flash->success(__('The comment has been liked.'));
         } else {
@@ -134,16 +143,11 @@ class CommentLikesController extends AppController
             );
         }
 
-        $comment = $this->CommentLikes->Comments->get(
-            $commentId,
-            contain: ['Articles']
-        );
-
         // Redirect to the article view page
         return $this->redirect([
             'controller' => 'Articles',
             'action' => 'view',
-            $comment->article->slug,
+            $comment->article->slug, // Redirect using the article's slug
         ]);
     }
 
