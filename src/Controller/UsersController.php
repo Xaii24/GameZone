@@ -125,18 +125,26 @@ class UsersController extends AppController
         $this->request->allowMethod(['get', 'post']);
 
         $result = $this->Authentication->getResult();
-        // Get the result of the authentication process
+
+        // Check if the authentication is successful
         if ($result && $result->isValid()) {
-            // redirect to /articles after login success
+            // Get the user entity
+            $user = $result->getData();
+
+            // Set the authenticated user identity
+            $this->Authentication->setIdentity($user);
+
+            // Redirect to the page they were trying to access or to the Articles index
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Users',
-                'action' => 'login',
+                'controller' => 'Articles',
+                'action' => 'index',
             ]);
             return $this->redirect($redirect);
         }
-        // display error
+
+        // Display error message if login fails
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->error(__('Invalid username or password.'));
         }
     }
 
