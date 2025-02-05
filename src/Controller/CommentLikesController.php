@@ -112,12 +112,7 @@ class CommentLikesController extends AppController
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
-            // Redirect to the article view page
-            return $this->redirect([
-                'controller' => 'Articles',
-                'action' => 'view',
-                $comment->article->slug,
-            ]);
+            return $this->redirect($this->referer());
         }
 
         // Create a new like entity

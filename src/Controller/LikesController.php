@@ -27,6 +27,50 @@ class LikesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
 
+    // public function add($articleId = null)
+    // {
+    //     $this->Authorization->skipAuthorization();
+
+    //     // Allow POST requests
+    //     $this->request->allowMethod(['post']);
+
+    //     // Check if articleId is null
+    //     if ($articleId === null) {
+    //         $this->Flash->error(__('Invalid article.'));
+    //         return $this->redirect($this->referer());
+    //     }
+
+    //     // Get the current user's ID
+    //     $userId = $this->request->getAttribute('identity')->get('id');
+
+    //     // Check if the user has already liked this article
+    //     $existingLike = $this->Likes
+    //         ->find()
+    //         ->where(['article_id' => $articleId, 'user_id' => $userId])
+    //         ->first();
+
+    //     if ($existingLike) {
+    //         $this->Flash->error(__('You have already liked this article.'));
+    //         return $this->redirect($this->referer());
+    //     }
+
+    //     // Create a new like entity
+    //     $like = $this->Likes->newEmptyEntity();
+    //     $like->article_id = $articleId;
+    //     $like->user_id = $userId;
+
+    //     // Save the like
+    //     if ($this->Likes->save($like)) {
+    //         $this->Flash->success(__('The article has been liked.'));
+    //     } else {
+    //         $this->Flash->error(
+    //             __('Unable to like the article. Please try again.')
+    //         );
+    //     }
+
+    //     return $this->redirect($this->referer());
+    // }
+
     public function add($articleId = null)
     {
         $this->Authorization->skipAuthorization();
@@ -68,7 +112,20 @@ class LikesController extends AppController
             );
         }
 
-        return $this->redirect($this->referer());
+        // Load the Articles table
+        $articlesTable = \Cake\ORM\TableRegistry::getTableLocator()->get(
+            'Articles'
+        );
+
+        // Fetch the article using its ID
+        $article = $articlesTable->get($articleId);
+
+        // Redirect to the article view page using slug
+        return $this->redirect([
+            'controller' => 'Articles',
+            'action' => 'view',
+            $article->slug,
+        ]);
     }
 
     /**
