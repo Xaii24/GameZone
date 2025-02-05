@@ -172,6 +172,44 @@ class UsersController extends AppController
         }
     }
 
+    // In UsersController.php
+
+    public function resetPassword()
+    {
+        if ($this->request->is('post')) {
+            // Process the email entered by the user
+            $email = $this->request->getData('email');
+            $user = $this->Users->findByEmail($email)->first();
+
+            if ($user) {
+                // Generate the reset token and expiration time
+                $token = Security::hash(Text::uuid(), 'sha256', true);
+                $user->password_reset_token = $token;
+                $user->password_reset_expires = new Time('+1 hour');
+                $this->Users->save($user);
+
+                // Send email with reset link
+                $resetLink = Router::url(
+                    [
+                        'controller' => 'Users',
+                        'action' => 'resetPasswordConfirm',
+                        $token,
+                    ],
+                    true
+                );
+                // Send the email with the link (use your mailer setup here)
+                // You might use Email::deliver or a custom email class
+
+                $this->Flash->success(
+                    'Check your email for a password reset link.'
+                );
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error('No user found with that email address.');
+            }
+        }
+    }
+
     // UsersController.php
     public function resetPasswordConfirm($token = null)
     {
