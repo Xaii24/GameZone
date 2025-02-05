@@ -46,6 +46,13 @@
                     <?= $this->Form->end() ?>
 
                     <?= $this->Html->link(
+                        'Forgot your password?',
+                        ['action' => 'resetPassword'],
+                        ['class' => 'forgot-password-link']
+                    ) ?>
+
+
+                    <?= $this->Html->link(
                         'Create Account',
                         ['action' => 'add'],
                         ['class' => 'btn btn-primary']

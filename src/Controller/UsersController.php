@@ -171,4 +171,54 @@ class UsersController extends AppController
             ]);
         }
     }
+
+    // UsersController.php
+    public function resetPasswordConfirm($token = null)
+    {
+        if (!$token) {
+            $this->Flash->error('Invalid token.');
+            return $this->redirect(['action' => 'login']);
+        }
+
+        // Look for the user by reset token
+        $user = $this->Users
+            ->find()
+            ->where([
+                'password_reset_token' => $token,
+                'password_reset_expires >' => new Time(),
+            ])
+            ->first();
+
+        if (!$user) {
+            $this->Flash->error('Invalid or expired token.');
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is('post')) {
+            // Save the new password
+            $user = $this->Users->patchEntity(
+                $user,
+                $this->request->getData(),
+                [
+                    'validate' => 'password',
+                ]
+            );
+
+            if ($this->Users->save($user)) {
+                // Clear the reset token and expiration time
+                $user->password_reset_token = null;
+                $user->password_reset_expires = null;
+                $this->Users->save($user);
+
+                $this->Flash->success('Your password has been reset.');
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error(
+                    'There was an error resetting your password.'
+                );
+            }
+        }
+
+        $this->set(compact('user'));
+    }
 }
