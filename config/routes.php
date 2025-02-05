@@ -11,16 +11,6 @@ $routes->scope('/', function (RouteBuilder $builder) {
         'login',
     ]);
 
-    $routes->connect('/users/reset-password', [
-        'controller' => 'Users',
-        'action' => 'resetPassword',
-    ]);
-    $routes
-        ->connect('/users/reset-password/:token', [
-            'controller' => 'Users',
-            'action' => 'resetPasswordConfirm',
-        ])
-        ->setPatterns(['token' => '[a-f0-9]{32}']);
     $builder->fallbacks();
 });
 
