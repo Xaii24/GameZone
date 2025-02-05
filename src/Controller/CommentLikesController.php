@@ -104,6 +104,23 @@ class CommentLikesController extends AppController
         // Get the current user's ID
         $userId = $this->request->getAttribute('identity')->get('id');
 
+        // Load the Articles table
+        $articlesTable = \Cake\ORM\TableRegistry::getTableLocator()->get(
+            'Articles'
+        );
+
+        // Fetch the comment with its related article
+        $comment = $this->CommentLikes->Comments->get(
+            $commentId,
+            ['contain' => ['Articles']] // Ensure the article is loaded with the comment
+        );
+
+        // If no comment or no related article, return an error
+        if (!$comment || !$comment->article) {
+            $this->Flash->error(__('Invalid comment or article.'));
+            return $this->redirect($this->referer());
+        }
+
         // Check if the user has already liked this comment
         $existingLike = $this->CommentLikes
             ->find()
@@ -112,12 +129,8 @@ class CommentLikesController extends AppController
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
-
-            return $this->redirect([
-                'controller' => 'Articles',
-                'action' => 'view',
-                $article->slug, // Now safe to use
-            ]);
+            // No redirect here, the page stays the same
+            return $this->redirect($this->referer()); // Stay on the current page
         }
 
         // Create a new like entity
@@ -133,11 +146,6 @@ class CommentLikesController extends AppController
                 __('Unable to like the comment. Please try again.')
             );
         }
-
-        $comment = $this->CommentLikes->Comments->get(
-            $commentId,
-            contain: ['Articles']
-        );
 
         // Redirect to the article view page
         return $this->redirect([
