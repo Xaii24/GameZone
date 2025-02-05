@@ -124,13 +124,19 @@ class CommentLikesController extends AppController
         // Check if the user has already liked this comment
         $existingLike = $this->CommentLikes
             ->find()
+            ->select(['id', 'slug'])
             ->where(['comment_id' => $commentId, 'user_id' => $userId])
             ->first();
 
         if ($existingLike) {
             $this->Flash->error(__('You have already liked this comment.'));
             // No redirect here, the page stays the same
-            return $this->redirect($this->referer()); // Stay on the current page
+            return $this->redirect(
+                $this->referer() ?: [
+                    'controller' => 'Articles',
+                    'action' => 'view',
+                ]
+            );
         }
 
         // Create a new like entity
