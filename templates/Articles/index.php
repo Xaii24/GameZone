@@ -25,8 +25,15 @@
     <img src="<?= $this->Url->image(
         'nintendo.gif'
     ) ?>" class="nintendo-gif" alt="Nintendo GIF">
-    <img src="img/gameboy.gif" class="gameboy-gif" alt="Gameboy GIF">
-    <img src="img/Rectangle.png" alt="Rectangle" class="Rectangle">
+    <!-- <img src="img/gameboy.gif" class="gameboy-gif" alt="Gameboy GIF"> -->
+    <img src="<?= $this->Url->image(
+        'gameboy.gif'
+    ) ?>" class="gameboy-gif" alt="Gameboy GIF">
+
+    <!-- <img src="img/Rectangle.png" alt="Rectangle" class="Rectangle"> -->
+    <img src="<?= $this->Url->image(
+        'Rectangle.png'
+    ) ?>" class="Rectangle-gif" alt="Rectangle">
     
 </div>
 
